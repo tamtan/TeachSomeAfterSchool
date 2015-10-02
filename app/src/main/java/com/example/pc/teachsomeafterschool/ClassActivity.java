@@ -13,13 +13,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.pc.teachsomeafterschool.Infra.DBHelper;
+import com.example.pc.teachsomeafterschool.Model.*;
+import com.example.pc.teachsomeafterschool.Model.Class;
+
+import java.util.Date;
+
 public class ClassActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    DBHelper db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class);
+        db= new DBHelper(getApplicationContext());
+        Date date = new Date();
+        com.example.pc.teachsomeafterschool.Model.Class firstClass = new Class("tam",date, false, 1000 );
+        long i = db.createClass(firstClass);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -74,7 +85,7 @@ public class ClassActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
