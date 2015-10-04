@@ -5,13 +5,13 @@ import java.util.Date;
 /**
  * Created by pc on 10/2/2015.
  */
-public class Class {
+public class ClassModel {
     String name;
     Date startingTime;
     boolean isFinish;
-    long tuition;
+    int tuition;
 
-    public Class(String name, Date startingTime, boolean isFinish, long tuition){
+    public ClassModel(String name, Date startingTime, boolean isFinish, int tuition){
         this.name = name;
         this.startingTime = startingTime;
         this.isFinish = isFinish;
@@ -26,7 +26,7 @@ public class Class {
         return tuition;
     }
 
-    public void setTuition(long tuition) {
+    public void setTuition(int tuition) {
         this.tuition = tuition;
     }
 

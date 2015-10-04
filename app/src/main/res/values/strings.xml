@@ -1,8 +1,18 @@
 <resources>
+    <!--Class activity-->
+    <string name="student_list">Danh Sách Lớp</string>
     <string name="app_name">TeachSomeAfterSchool</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="class_list">Danh Sách Lớp</string>
+    <string name="monday">2</string>
+    <string name="tuesday">3</string>
+    <string name="wednesday">4</string>
+    <string name="thusday">5</string>
+    <string name="friday">6</string>
+    <string name="saturday">7</string>
+    <string name="sunday">CN</string>
 </resources>

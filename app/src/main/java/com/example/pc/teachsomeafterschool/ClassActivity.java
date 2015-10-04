@@ -1,9 +1,6 @@
 package com.example.pc.teachsomeafterschool;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,48 +9,73 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
+import com.example.pc.teachsomeafterschool.Class.DrawerClassListAdapter;
 import com.example.pc.teachsomeafterschool.Infra.DBHelper;
-import com.example.pc.teachsomeafterschool.Model.*;
-import com.example.pc.teachsomeafterschool.Model.Class;
+import com.example.pc.teachsomeafterschool.Model.ClassModel;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ClassActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DrawerLayout.DrawerListener {
     DBHelper db;
+    LinearLayout content_fragment, nav_view;
+    //TextView nav_view;
+    DrawerLayout drawer;
+    ActionBarDrawerToggle toggle;
+    DrawerClassListAdapter classAdapter;
+    ListView lvclass;
+    Toolbar toolbar;
+    ArrayList<ClassModel> classList;
+    ClassModel firstClass;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+       /**/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class);
-        db= new DBHelper(getApplicationContext());
+        db = new DBHelper(getApplicationContext());
         Date date = new Date();
-        com.example.pc.teachsomeafterschool.Model.Class firstClass = new Class("tam",date, false, 1000 );
+        firstClass = new ClassModel("tam", date, false, 1000);
         long i = db.createClass(firstClass);
+        init();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        //nav_view.setNavigationItemSelectedListener(this);
+        //
+        // nav_view = (TextView) findViewById(R.id.nav_view);
     }
 
-    @Override
+    public void init() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        content_fragment = (LinearLayout) findViewById(R.id.content_fragment);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerListener(this);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //drawer.setDrawerListener(toggle);
+        toggle.syncState();
+        nav_view = (LinearLayout) findViewById(R.id.nav_view);
+        lvclass = (ListView) findViewById(R.id.lvdrawer_class_list);
+        classList = new ArrayList<ClassModel>();
+        classList.add(firstClass);
+        classAdapter = new DrawerClassListAdapter(this, R.layout.drawer_class_list_item, classList);
+        lvclass.setAdapter(classAdapter);
+    }
+
+
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -85,7 +107,7 @@ public class ClassActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-     @SuppressWarnings("StatementWithEmptyBody")
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -104,9 +126,34 @@ public class ClassActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onDrawerSlide(View drawerView, float slideOffset) {
+        if (nav_view != null && content_fragment != null) {
+            // Get the width of the NavigationDrawerFragment
+            int width = nav_view.getWidth();
+
+            // Set the translationX of the Fragment's View to be the offset (a percentage)
+            // times the width of the NavigationDrawerFragment
+            content_fragment.setTranslationX(width * slideOffset);
+        }
+    }
+
+    @Override
+    public void onDrawerOpened(View drawerView) {
+
+    }
+
+    @Override
+    public void onDrawerClosed(View drawerView) {
+
+    }
+
+    @Override
+    public void onDrawerStateChanged(int newState) {
+
     }
 }
