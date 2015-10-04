@@ -71,6 +71,7 @@ public class ClassActivity extends AppCompatActivity
         lvclass = (ListView) findViewById(R.id.lvdrawer_class_list);
         classList = new ArrayList<ClassModel>();
         classList.add(firstClass);
+        //Take a look why it displays nothing.
         classAdapter = new DrawerClassListAdapter(this, R.layout.drawer_class_list_item, classList);
         lvclass.setAdapter(classAdapter);
     }
