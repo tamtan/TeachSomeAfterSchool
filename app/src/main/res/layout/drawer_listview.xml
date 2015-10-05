@@ -1,30 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/burlywood"
-    >
+    android:orientation="vertical">
 
     <TextView
-        style="@style/dawer_title"
         android:id="@+id/tvdrawer_title"
+        style="@style/dawer_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="6"
-        android:text="@string/class_list"
+        android:layout_weight="5"
+        android:background="@color/green"
         android:gravity="center"
-        android:background="@color/green"/>
-    <ListView
-        android:id="@+id/lvdrawer_class_list"
+        android:text="@string/class_list" />
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        ></ListView>
+        android:layout_weight="1">
+
+        <ListView
+            android:id="@+id/lvdrawer_class_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
+    </ScrollView>
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="6"
         android:layout_gravity="center"
+        android:layout_weight="5"
         android:src="@drawable/class_adding_button">
 
     </ImageView>
