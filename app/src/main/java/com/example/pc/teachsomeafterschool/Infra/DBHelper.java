@@ -29,8 +29,11 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TABLE_CLASS_STUDENT = "class_students";
     private static final String TABLE_TUITION = "tuitions";
     private static final String TABLE_STUDENT_TUITION = "student_tuitions";
+    private static final String TABLE_WEEK_SCHEDULE = "week_schedules";
+    private static final String TABLE_CLASS_WEEK_SCHEDULE = "class_week_schedule";
 
-
+    // WEEK SCHEDULE table - column names
+    private static final String KEY_WEEK_TIME = "week_time";
     // Common column names
     private static final String KEY_ID = "id";
     private static final String KEY_STUDENT_ID = "student_id";
@@ -115,6 +118,21 @@ public class DBHelper extends SQLiteOpenHelper {
             + KEY_CLASS_ID + " INTEGER," + KEY_STUDENT_ID + " INTEGER"
             + ")";
 
+
+
+    // WEEK_SCHEDULE table create statement
+    private static final String CREATE_TABLE_WEEK_SCHEDULE = "CREATE TABLE "
+            + TABLE_WEEK_SCHEDULE + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_WEEK_TIME + " TEXT"
+            + ")";
+
+    private static final String KEY_WEEK_SCHEDULE_ID = "week_schedule_id" ;
+    // CLASS_WEEK_SCHEDULE table create statement
+    private static final String CREATE_TABLE_CLASS_WEEK_SCHEDULE = "CREATE TABLE "
+            + TABLE_CLASS_WEEK_SCHEDULE + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_CLASS_ID + " INTEGER," + KEY_WEEK_SCHEDULE_ID + " INTEGER"
+            + ")";
+
     // STUDENT_TUITION table create statement
     private static final String CREATE_TABLE_STUDENT_TUITION = "CREATE TABLE "
             + TABLE_STUDENT_TUITION + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
@@ -134,6 +152,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_TUITION);
         db.execSQL(CREATE_TABLE_CLASS_STUDENT);
         db.execSQL(CREATE_TABLE_STUDENT_TUITION);
+        db.execSQL(CREATE_TABLE_WEEK_SCHEDULE);
+        db.execSQL(CREATE_TABLE_CLASS_WEEK_SCHEDULE);
     }
 
     @Override
@@ -144,7 +164,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASS_STUDENT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TUITION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STUDENT_TUITION);
-
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WEEK_SCHEDULE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASS_WEEK_SCHEDULE);
         // create new tables
         onCreate(db);
     }
@@ -156,7 +177,6 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     public long createClass(com.example.pc.teachsomeafterschool.Model.ClassModel instant) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, instant.getName());
         values.put(KEY_STARTING_TIME, getDateTime());
