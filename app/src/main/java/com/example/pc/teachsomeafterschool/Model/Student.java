@@ -77,6 +77,4 @@ public class Student {
     public int getSex() {
         return sex;
     }
-
-
 }

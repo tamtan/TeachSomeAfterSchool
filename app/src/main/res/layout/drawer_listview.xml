@@ -14,17 +14,11 @@
         android:background="@color/green"
         android:gravity="center"
         android:text="@string/class_list" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-
         <ListView
+            android:layout_weight="1"
             android:id="@+id/lvdrawer_class_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"></ListView>
-    </ScrollView>
 
     <ImageView
         android:layout_width="wrap_content"

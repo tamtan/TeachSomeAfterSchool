@@ -6,19 +6,31 @@ import java.util.Date;
  * Created by pc on 10/2/2015.
  */
 public class ClassModel {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    int id;
     String name;
-    Date startingTime;
-    boolean isFinish;
+    String startingTime;
+    int isFinish;
     int tuition;
 
-    public ClassModel(String name, Date startingTime, boolean isFinish, int tuition){
+    public ClassModel(String name, String startingTime, int isFinish, int tuition){
         this.name = name;
         this.startingTime = startingTime;
         this.isFinish = isFinish;
         this.tuition = tuition;
     }
 
-    public boolean isFinish() {
+    public ClassModel() {
+    }
+
+    public int isFinish() {
         return isFinish;
     }
 
@@ -30,7 +42,7 @@ public class ClassModel {
         this.tuition = tuition;
     }
 
-    public void setIsFinish(boolean isFinish) {
+    public void setIsFinish(int isFinish) {
         this.isFinish = isFinish;
     }
 
@@ -40,10 +52,10 @@ public class ClassModel {
     public String getName(){
         return name;
     }
-    public void setStartingTime(Date date){
+    public void setStartingTime(String date){
         this.startingTime = date;
     }
-    public Date getStartingTime(){
+    public String getStartingTime(){
         return startingTime;
     }
 }
