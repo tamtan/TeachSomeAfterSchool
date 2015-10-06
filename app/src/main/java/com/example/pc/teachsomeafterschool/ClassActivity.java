@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.pc.teachsomeafterschool.Class.ClassInfoActivity;
+import com.example.pc.teachsomeafterschool.Class.ClassInfoActivity_;
 import com.example.pc.teachsomeafterschool.Class.DrawerClassListAdapter;
 import com.example.pc.teachsomeafterschool.Infra.DBHelper;
 import com.example.pc.teachsomeafterschool.Model.ClassModel;
@@ -213,7 +214,7 @@ public class ClassActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(ClassActivity.this, ClassInfoActivity.class);
+        Intent intent = new Intent(ClassActivity.this, ClassInfoActivity_.class);
         startActivity(intent);
     }
 }

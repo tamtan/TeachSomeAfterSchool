@@ -14,13 +14,114 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <Spinner
+            android:id="@+id/spGradeSelector"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/spGradeSelector"
-            android:layout_gravity="left"/>
+            android:entries="@array/grade_list"
+            android:prompt="@string/grade_hint"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:text="@string/tuition"
+                    android:textSize="13pt"/>
+            <EditText
+                android:id="@+id/edtTuition"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:background="@color/gray"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="7"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvmonday"
+                    android:background="@color/gray"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:text="@string/monday1"
+                    android:textSize="13pt"/>
+                <TextView
+                    android:id="@+id/tvtuesday"
+                    android:background="@color/gray"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:text="@string/tuesday1"
+                    android:textSize="13pt"/>
+                <TextView
+                    android:id="@+id/tvwednesday"
+                    android:background="@color/gray"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:text="@string/wednesday1"
+                    android:textSize="13pt"/>
+                <TextView
+                    android:id="@+id/tvthursday"
+                    android:background="@color/gray"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:text="@string/thusday1"
+                    android:textSize="13pt"/>
+                <TextView
+                    android:id="@+id/tvfriday"
+                    android:background="@color/gray"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:text="@string/friday1"
+                    android:textSize="13pt"/>
+                <TextView
+                    android:id="@+id/tvsaturday"
+                    android:background="@color/gray"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:text="@string/saturday1"
+                    android:textSize="13pt"/>
+                <TextView
+                    android:id="@+id/tvsunday"
+                    android:background="@color/gray"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:text="@string/sunday1"
+                    android:textSize="13pt"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                >
+
+            </LinearLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>
