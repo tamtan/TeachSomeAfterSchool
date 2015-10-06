@@ -7,10 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.example.pc.teachsomeafterschool.Model.ClassModel;
 import com.example.pc.teachsomeafterschool.R;
-
 import java.util.ArrayList;
 
 /**
