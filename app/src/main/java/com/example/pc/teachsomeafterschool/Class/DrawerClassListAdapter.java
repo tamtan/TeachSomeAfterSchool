@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.example.pc.teachsomeafterschool.Model.ClassModel;
@@ -13,31 +14,18 @@ import java.util.ArrayList;
 /**
  * Created by TAM on 03-Oct-15.
  */
-public class DrawerClassListAdapter extends BaseAdapter {
+public class DrawerClassListAdapter extends ArrayAdapter<ClassModel> {
 
     int layout;
     Context context;
     ArrayList<ClassModel> classList;
     public DrawerClassListAdapter(Context context, int layout,ArrayList<ClassModel> classList){
-       // super(context,layout,classList);
+        super(context,layout,classList);
         this.layout = layout;
         this.context = context;
         this.classList = classList;
     }
-    @Override
-    public int getCount() {
-        return 0;
-    }
 
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -59,6 +47,8 @@ public class DrawerClassListAdapter extends BaseAdapter {
         else{
             holder = (ViewHolder) convertView.getTag();
         }
+        holder.tvclass_name.setText(classList.get(position).getName());
+        String test = holder.tvclass_name.getText().toString();
         return convertView;
     }
     class ViewHolder{

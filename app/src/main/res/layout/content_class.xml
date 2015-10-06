@@ -12,7 +12,7 @@
     tools:context=".ClassActivity"
     tools:showIn="@layout/app_bar_class">
 
-    <ListView android:id="@+id/student_list"
+    <ListView android:id="@+id/lvstudent_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         ></ListView>
