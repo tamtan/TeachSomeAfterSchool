@@ -1,5 +1,6 @@
 package com.example.pc.teachsomeafterschool;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -12,9 +13,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.example.pc.teachsomeafterschool.Class.ClassInfoActivity;
 import com.example.pc.teachsomeafterschool.Class.DrawerClassListAdapter;
 import com.example.pc.teachsomeafterschool.Infra.DBHelper;
 import com.example.pc.teachsomeafterschool.Model.ClassModel;
@@ -25,7 +28,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class ClassActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, DrawerLayout.DrawerListener, AdapterView.OnItemClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DrawerLayout.DrawerListener, AdapterView.OnItemClickListener, View.OnClickListener {
+    ImageView imgAdd;
     DBHelper db;
     LinearLayout content_fragment, nav_view;
     //TextView nav_view;
@@ -80,6 +84,8 @@ public class ClassActivity extends AppCompatActivity
     }
 
     public void init() {
+        imgAdd = (ImageView) findViewById(R.id.imgAdd);
+        imgAdd.setOnClickListener(this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         lvstudent = (ListView) findViewById(R.id.lvstudent_list);
         setSupportActionBar(toolbar);
@@ -203,5 +209,11 @@ public class ClassActivity extends AppCompatActivity
         studentList.add(thirdStudent);
         studentAdapter = new StudentListAdapter(this, R.layout.student_list_item,studentList);
         lvstudent.setAdapter(studentAdapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(ClassActivity.this, ClassInfoActivity.class);
+        startActivity(intent);
     }
 }

@@ -55,7 +55,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_OFFICIAL_CLASS = "official_class";
     private static final String KEY_SCHOOL = "school";
     private static final String KEY_PHONE = "phone";
-    private static final String KEY_ADDRESS = "add";
+    private static final String KEY_ADDRESS = "address";
     private static final String KEY_SEX = "sex";
     private static final String KEY_AVATAR = "image_url";
 
