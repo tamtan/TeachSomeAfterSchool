@@ -55,7 +55,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_OFFICIAL_CLASS = "official_class";
     private static final String KEY_SCHOOL = "school";
     private static final String KEY_PHONE = "phone";
-    private static final String KEY_ADDRESS = "add";
+    private static final String KEY_ADDRESS = "address";
     private static final String KEY_SEX = "sex";
     private static final String KEY_AVATAR = "image_url";
 
@@ -94,12 +94,12 @@ public class DBHelper extends SQLiteOpenHelper {
             + KEY_SEX
             + " INTEGER,"
             + KEY_AVATAR + " TEXT,"
-            + KEY_STARTING_TIME + " DATETIME" + ")";
+            + KEY_STARTING_TIME + " TEXT" + ")";
 
     // CLASS table create statement
     private static final String CREATE_TABLE_CLASS = "CREATE TABLE " + TABLE_CLASS
             + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-            + KEY_STARTING_TIME + " DATETIME," + KEY_IS_FINISH + " INTEGER," + KEY_TUITION + " INTEGER" + ")";
+            + KEY_STARTING_TIME + " TEXT," + KEY_IS_FINISH + " INTEGER," + KEY_TUITION + " INTEGER" + ")";
 
     // TUITION table create statement
     private static final String CREATE_TABLE_TUITION = "CREATE TABLE " + TABLE_TUITION
@@ -153,10 +153,11 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         // creating required tables
-        db.execSQL(CREATE_TABLE_STUDENT);
+
         db.execSQL(CREATE_TABLE_CLASS);
         db.execSQL(CREATE_TABLE_TUITION);
         db.execSQL(CREATE_TABLE_CLASS_STUDENT);
+        db.execSQL(CREATE_TABLE_STUDENT);
         db.execSQL(CREATE_TABLE_STUDENT_TUITION);
         db.execSQL(CREATE_TABLE_WEEK_SCHEDULE);
         db.execSQL(CREATE_TABLE_CLASS_WEEK_SCHEDULE);
@@ -164,13 +165,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // on upgrade drop older tables
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_STUDENT);
+        // on upgrade drop older tsables
+
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASS_STUDENT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TUITION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STUDENT_TUITION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WEEK_SCHEDULE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_STUDENT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASS_WEEK_SCHEDULE);
         // create new tables
         onCreate(db);
