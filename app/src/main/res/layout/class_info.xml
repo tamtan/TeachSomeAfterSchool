@@ -11,7 +11,9 @@
 
         <include layout="@layout/actionbar"></include>
     </LinearLayout>
+
     <LinearLayout
+        style="@style/lnBody"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -22,157 +24,188 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:entries="@array/grade_list"
-            android:prompt="@string/grade_hint"/>
+            android:prompt="@string/grade_hint" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="7"
-                    android:text="@string/tuition"
-                    android:textSize="13pt"/>
+            <TextView
+                style="@style/tvTuition"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/tuition" />
+
             <EditText
                 android:id="@+id/edtTuition"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:background="@color/gray"/>
+                android:layout_weight="1"
+                android:background="@color/gray"
+                android:inputType="number"/>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="7"
                 android:orientation="vertical">
+
                 <TextView
-                    android:id="@+id/tvmonday"
-                    android:background="@color/gray"
-                    android:gravity="center"
+                    android:id="@+id/tvMonday"
+                    style="@style/tvWeek_day"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="7"
-                    android:text="@string/monday1"
-                    android:textSize="13pt"/>
-                <TextView
-                    android:id="@+id/tvtuesday"
                     android:background="@color/gray"
                     android:gravity="center"
+                    android:text="@string/monday1" />
+
+                <TextView
+                    android:id="@+id/tvTuesday"
+                    style="@style/tvWeek_day"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="7"
-                    android:text="@string/tuesday1"
-                    android:textSize="13pt"/>
-                <TextView
-                    android:id="@+id/tvwednesday"
                     android:background="@color/gray"
                     android:gravity="center"
+                    android:text="@string/tuesday1" />
+
+                <TextView
+                    android:id="@+id/tvWednesday"
+                    style="@style/tvWeek_day"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="7"
-                    android:text="@string/wednesday1"
-                    android:textSize="13pt"/>
-                <TextView
-                    android:id="@+id/tvthursday"
                     android:background="@color/gray"
                     android:gravity="center"
+                    android:text="@string/wednesday1" />
+
+                <TextView
+                    android:id="@+id/tvThursday"
+                    style="@style/tvWeek_day"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="7"
-                    android:text="@string/thusday1"
-                    android:textSize="13pt"/>
-                <TextView
-                    android:id="@+id/tvfriday"
                     android:background="@color/gray"
                     android:gravity="center"
+                    android:text="@string/thusday1" />
+
+                <TextView
+                    android:id="@+id/tvFriday"
+                    style="@style/tvWeek_day"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="7"
-                    android:text="@string/friday1"
-                    android:textSize="13pt"/>
-                <TextView
-                    android:id="@+id/tvsaturday"
                     android:background="@color/gray"
                     android:gravity="center"
+                    android:text="@string/friday1" />
+
+                <TextView
+                    android:id="@+id/tvSaturday"
+                    style="@style/tvWeek_day"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="7"
-                    android:text="@string/saturday1"
-                    android:textSize="13pt"/>
-                <TextView
-                    android:id="@+id/tvsunday"
                     android:background="@color/gray"
                     android:gravity="center"
+                    android:text="@string/saturday1" />
+
+                <TextView
+                    android:id="@+id/tvSunday"
+                    style="@style/tvWeek_day"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="7"
-                    android:text="@string/sunday1"
-                    android:textSize="13pt"/>
+                    android:background="@color/gray"
+                    android:gravity="center"
+                    android:text="@string/sunday1" />
             </LinearLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
-                >
+                android:layout_weight="3">
+
                 <LinearLayout
+                    android:id="@+id/lnTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:id="@+id/lnTime">
-                    <TextView
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/start"
-                        android:gravity="center"/>
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:id="@+id/tvSpellToggle1"
+                        android:id="@+id/tvStartTime"
+                        style="@style/tvWeek_day"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/stop"/>
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/start"
+                        android:visibility="invisible"/>
+
+                    <TextView
+
+                        style="@style/tvWeek_day"
+                        android:id="@+id/tvStopTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/stop"
+                        android:visibility="invisible"/>
                 </LinearLayout>
+
                 <LinearLayout
-                    android:id="@+id/lnStoppingTime"
+                    android:id="@+id/lnTimePicker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_above="@+id/lnManipulateButton"
+                    android:layout_below="@+id/lnTime"
                     android:gravity="center"
-                    >
+                    android:orientation="horizontal">
 
                     <TimePicker
-                        android:id="@+id/timePicker1"
+                        android:id="@+id/tpTimePicker"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible"/>
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/lnManipulateButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/ok"/>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/edit"/>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/cancel"/>
-                </LinearLayout>
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
+                    <Button
+                        android:id="@+id/btOk"
+                        style="@style/lnBody"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ok" />
+
+                    <Button
+                        android:id="@+id/btEdit"
+                        style="@style/lnBody"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/edit" />
+
+                    <Button
+                        android:id="@+id/btCancel"
+                        style="@style/lnBody"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cancel" />
+                </LinearLayout>
 
 
             </RelativeLayout>

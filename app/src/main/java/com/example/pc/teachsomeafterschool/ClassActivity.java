@@ -1,7 +1,6 @@
 package com.example.pc.teachsomeafterschool;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,8 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-
-import com.example.pc.teachsomeafterschool.Class.ClassInfoActivity;
 import com.example.pc.teachsomeafterschool.Class.ClassInfoActivity_;
 import com.example.pc.teachsomeafterschool.Class.DrawerClassListAdapter;
 import com.example.pc.teachsomeafterschool.Infra.DBHelper;
@@ -25,7 +22,6 @@ import com.example.pc.teachsomeafterschool.Model.ClassModel;
 import com.example.pc.teachsomeafterschool.Model.Student;
 import com.example.pc.teachsomeafterschool.Student.StudentInfoActivity;
 import com.example.pc.teachsomeafterschool.Student.StudentListAdapter;
-
 import java.util.ArrayList;
 import java.util.Date;
 
