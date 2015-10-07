@@ -33,4 +33,11 @@
     <string name="friday1">Thứ 6</string>
     <string name="saturday1">Thứ 7</string>
     <string name="sunday1">Chủ Nhật</string>
+    <string name="start">Bắt Đầu</string>
+    <string name="spell">Sáng</string>
+    <string name="stop">Kết Thúc</string>
+    <string name="edit">Sửa</string>
+    <string name="cancel">Hủy</string>
+    <string name="ok">Ok</string>
+    <string name="className">Lớp</string>
 </resources>

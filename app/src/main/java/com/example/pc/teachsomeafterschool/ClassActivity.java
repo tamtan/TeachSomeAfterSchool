@@ -23,6 +23,7 @@ import com.example.pc.teachsomeafterschool.Class.DrawerClassListAdapter;
 import com.example.pc.teachsomeafterschool.Infra.DBHelper;
 import com.example.pc.teachsomeafterschool.Model.ClassModel;
 import com.example.pc.teachsomeafterschool.Model.Student;
+import com.example.pc.teachsomeafterschool.Student.StudentInfoActivity;
 import com.example.pc.teachsomeafterschool.Student.StudentListAdapter;
 
 import java.util.ArrayList;
@@ -89,6 +90,7 @@ public class ClassActivity extends AppCompatActivity
         imgAdd.setOnClickListener(this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         lvstudent = (ListView) findViewById(R.id.lvstudent_list);
+        lvstudent.setOnItemClickListener(this);
         setSupportActionBar(toolbar);
         content_fragment = (LinearLayout) findViewById(R.id.content_fragment);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -202,14 +204,19 @@ public class ClassActivity extends AppCompatActivity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        lvstudent.setAdapter(null);
-        Student thirdStudent = new Student();
-        thirdStudent.setFull_name("Nguyen Duc Hien");
-        studentList.clear();
-        studentList.add(thirdStudent);
-        studentAdapter = new StudentListAdapter(this, R.layout.student_list_item,studentList);
-        lvstudent.setAdapter(studentAdapter);
+        if(parent.getId()== R.id.lvdrawer_class_list) {
+            lvstudent.setAdapter(null);
+            Student thirdStudent = new Student();
+            thirdStudent.setFull_name("Nguyen Duc Hien");
+            studentList.clear();
+            studentList.add(thirdStudent);
+            studentAdapter = new StudentListAdapter(this, R.layout.student_list_item, studentList);
+            lvstudent.setAdapter(studentAdapter);
+        }
+        if(parent.getId()==R.id.lvstudent_list){
+            Intent intent = new Intent(ClassActivity.this, StudentInfoActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
