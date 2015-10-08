@@ -3,6 +3,7 @@ package com.example.pc.teachsomeafterschool.Class;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.AnyRes;
 import android.support.annotation.ColorRes;
 import android.support.annotation.StringRes;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.pc.teachsomeafterschool.Infra.Const;
 import com.example.pc.teachsomeafterschool.Model.ClassModel;
 import com.example.pc.teachsomeafterschool.Model.WeekDay;
 import com.example.pc.teachsomeafterschool.Model.WeekSchedule;
@@ -24,9 +26,10 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 
 /**
- * Created by TAM on 05-Oct-15.
+ * Created by TAM on 05-Oct-s15.
  */
 @org.androidannotations.annotations.EActivity(R.layout.class_info)
+
 public class ClassInfoActivity extends Activity {
     @ViewById
     Spinner spGradeSelector;
@@ -41,12 +44,15 @@ public class ClassInfoActivity extends Activity {
     @ViewById
     TextView tvStartTime, tvStopTime;
 
-    @StringRes
-    int start, stop;
-    @StringRes
-    String monday, tuesday, wednesday, thursday, friday, saturday, sunday;
-    @ColorRes
-            Color gray;
+//    @StringRes
+//    String start;
+////    @StringRes(R.string.stop)
+//    int stop;
+//    @StringRes(R.string.start)
+//    int two;
+//    @StringRes
+//    String monday, tuesday, wednesday, thursday, friday, saturday, sunday;
+//
 
     ArrayList<WeekDay> weekDays;
     String weekTime;
@@ -59,6 +65,7 @@ public class ClassInfoActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
+
     }
 
     private void init() {
@@ -67,13 +74,15 @@ public class ClassInfoActivity extends Activity {
 
     @Click({R.id.tvMonday, R.id.tvTuesday, R.id.tvWednesday, R.id.tvThursday, R.id.tvFriday, R.id.tvSaturday, R.id.tvSunday})
     void AddNewWeekDay(View view) {
-        Log.d("Start", Integer.toString(start));
+//        Log.d("Start", Integer.toString(start));
 
+        MarkScheduleDays(weekDays);
         chosenDay = new WeekDay();
         isStartFinish = false;
         isStopFinish = false;
-        tvStartTime.setText("Start");
-        tvStopTime.setText("Stop");
+
+        tvStartTime.setText(R.string.start);
+        tvStopTime.setText(R.string.stop);
         if (tvStartTime.getVisibility() == View.INVISIBLE) {
             tvStartTime.setVisibility(View.VISIBLE);
             tvStopTime.setVisibility(View.VISIBLE);
@@ -81,31 +90,31 @@ public class ClassInfoActivity extends Activity {
         }
         switch (view.getId()) {
             case R.id.tvMonday:
-                chosenDay.setDay("2");
+                chosenDay.setDay(getApplicationContext().getResources().getString(R.string.monday));
                 tvMonday.setBackgroundColor(Color.GRAY);
                 break;
             case R.id.tvTuesday:
-                chosenDay.setDay("3");
+                chosenDay.setDay(getApplicationContext().getResources().getString(R.string.tuesday));
                 tvTuesday.setBackgroundColor(Color.GRAY);
                 break;
             case R.id.tvWednesday:
-                chosenDay.setDay("4");
+                chosenDay.setDay(getApplicationContext().getResources().getString(R.string.wednesday));
                 tvWednesday.setBackgroundColor(Color.GRAY);
                 break;
             case R.id.tvThursday:
-                chosenDay.setDay("5");
+                chosenDay.setDay(getApplicationContext().getResources().getString(R.string.thusday));
                 tvThursday.setBackgroundColor(Color.GRAY);
                 break;
             case R.id.tvFriday:
-                chosenDay.setDay("6");
+                chosenDay.setDay(getApplicationContext().getResources().getString(R.string.friday));
                 tvFriday.setBackgroundColor(Color.GRAY);
                 break;
             case R.id.tvSaturday:
-                chosenDay.setDay("7");
+                chosenDay.setDay(getApplicationContext().getResources().getString(R.string.saturday));
                 tvSaturday.setBackgroundColor(Color.GRAY);
                 break;
             case R.id.tvSunday:
-                chosenDay.setDay("CN");
+                chosenDay.setDay(getApplicationContext().getResources().getString(R.string.sunday));
                 tvSunday.setBackgroundColor(Color.GRAY);
                 break;
         }
@@ -115,7 +124,7 @@ public class ClassInfoActivity extends Activity {
     @Click(R.id.tvStartTime)
     void AddNewStartTime() {
         isStartFinish = false;
-        tvStartTime.setText("Start");
+        tvStartTime.setText(getApplicationContext().getResources().getString(R.string.start));
 //        int hour = tpTimePicker.getCurrentHour();
 //        int minute = tpTimePicker.getCurrentMinute();
 //        String time = Integer.toString(hour) +":"+ Integer.toString(minute);
@@ -127,7 +136,7 @@ public class ClassInfoActivity extends Activity {
 
     @Click(R.id.tvStopTime)
     void AddNewStopTime() {
-        tvStopTime.setText("Stop");
+        tvStopTime.setText(getApplicationContext().getResources().getString(R.string.stop));
         isStopFinish = false;
         if (tpTimePicker.getVisibility() == View.INVISIBLE) {
             tpTimePicker.setVisibility(View.VISIBLE);
@@ -149,7 +158,6 @@ public class ClassInfoActivity extends Activity {
             String time = Integer.toString(hour) + ":" + Integer.toString(minute);
             tvStopTime.setText(time);
             isStopFinish = true;
-        } else {
             if (!isDayExisted(chosenDay, weekDays)) {
                 Add(chosenDay, weekDays);
             } else {
@@ -158,6 +166,7 @@ public class ClassInfoActivity extends Activity {
             if (tpTimePicker.getVisibility() == View.VISIBLE) {
                 tpTimePicker.setVisibility(View.INVISIBLE);
             }
+
         }
     }
 
@@ -182,10 +191,30 @@ public class ClassInfoActivity extends Activity {
         }
     }
 
-    private void CheckWeekSchedule(ArrayList<WeekDay> weekDays) {
+    private void MarkScheduleDays(ArrayList<WeekDay> weekDays) {
         for (WeekDay day : weekDays) {
             switch (day.getDay()) {
-//
+                case Const.monday:
+                    tvMonday.setBackgroundColor(Color.GRAY);
+                    break;
+                case Const.tuesday:
+                    tvTuesday.setBackgroundColor(Color.GRAY);
+                    break;
+                case Const.wednesday:
+                    tvWednesday.setBackgroundColor(Color.GRAY);
+                    break;
+                case Const.thursday:
+                    tvThursday.setBackgroundColor(Color.GRAY);
+                    break;
+                case Const.friday:
+                    tvFriday.setBackgroundColor(Color.GRAY);
+                    break;
+                case Const.saturday:
+                    tvSaturday.setBackgroundColor(Color.GRAY);
+                    break;
+                case Const.sunday:
+                    tvSunday.setBackgroundColor(Color.GRAY);
+                    break;
 
             }
         }
