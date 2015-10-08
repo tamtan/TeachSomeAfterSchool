@@ -1,7 +1,9 @@
 package com.example.pc.teachsomeafterschool.Class;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
 import android.support.annotation.StringRes;
 import android.util.Log;
 import android.view.View;
@@ -40,8 +42,11 @@ public class ClassInfoActivity extends Activity {
     TextView tvStartTime, tvStopTime;
 
     @StringRes
-    String start, stop;
-
+    int start, stop;
+    @StringRes
+    String monday, tuesday, wednesday, thursday, friday, saturday, sunday;
+    @ColorRes
+            Color gray;
 
     ArrayList<WeekDay> weekDays;
     String weekTime;
@@ -62,7 +67,8 @@ public class ClassInfoActivity extends Activity {
 
     @Click({R.id.tvMonday, R.id.tvTuesday, R.id.tvWednesday, R.id.tvThursday, R.id.tvFriday, R.id.tvSaturday, R.id.tvSunday})
     void AddNewWeekDay(View view) {
-        //Log.d("Start", start);
+        Log.d("Start", Integer.toString(start));
+
         chosenDay = new WeekDay();
         isStartFinish = false;
         isStopFinish = false;
@@ -76,31 +82,31 @@ public class ClassInfoActivity extends Activity {
         switch (view.getId()) {
             case R.id.tvMonday:
                 chosenDay.setDay("2");
-
+                tvMonday.setBackgroundColor(Color.GRAY);
                 break;
             case R.id.tvTuesday:
                 chosenDay.setDay("3");
-
+                tvTuesday.setBackgroundColor(Color.GRAY);
                 break;
             case R.id.tvWednesday:
                 chosenDay.setDay("4");
-
+                tvWednesday.setBackgroundColor(Color.GRAY);
                 break;
             case R.id.tvThursday:
                 chosenDay.setDay("5");
-
+                tvThursday.setBackgroundColor(Color.GRAY);
                 break;
             case R.id.tvFriday:
                 chosenDay.setDay("6");
-
+                tvFriday.setBackgroundColor(Color.GRAY);
                 break;
             case R.id.tvSaturday:
                 chosenDay.setDay("7");
-
+                tvSaturday.setBackgroundColor(Color.GRAY);
                 break;
             case R.id.tvSunday:
                 chosenDay.setDay("CN");
-
+                tvSunday.setBackgroundColor(Color.GRAY);
                 break;
         }
 
@@ -144,10 +150,10 @@ public class ClassInfoActivity extends Activity {
             tvStopTime.setText(time);
             isStopFinish = true;
         } else {
-            if(!isDayExisted(chosenDay,weekDays)){
-                Add(chosenDay,weekDays);
-            }else{
-                Edit(chosenDay,weekDays);
+            if (!isDayExisted(chosenDay, weekDays)) {
+                Add(chosenDay, weekDays);
+            } else {
+                Edit(chosenDay, weekDays);
             }
             if (tpTimePicker.getVisibility() == View.VISIBLE) {
                 tpTimePicker.setVisibility(View.INVISIBLE);
@@ -156,8 +162,8 @@ public class ClassInfoActivity extends Activity {
     }
 
     private void Edit(WeekDay chosenDay, ArrayList<WeekDay> weekDays) {
-        for(WeekDay day: weekDays){
-            if(day.getDay().equals(chosenDay.getDay())){
+        for (WeekDay day : weekDays) {
+            if (day.getDay().equals(chosenDay.getDay())) {
                 day.setStartTime(chosenDay.getStartTime());
                 day.setStopTime(chosenDay.getStopTime());
             }
@@ -169,11 +175,20 @@ public class ClassInfoActivity extends Activity {
     }
 
     private boolean isDayExisted(WeekDay chosenDay, ArrayList<WeekDay> weekDays) {
-        if(weekDays.contains(chosenDay)){
+        if (weekDays.contains(chosenDay)) {
             return true;
-        }else{
+        } else {
             return false;
         }
-
     }
+
+    private void CheckWeekSchedule(ArrayList<WeekDay> weekDays) {
+        for (WeekDay day : weekDays) {
+            switch (day.getDay()) {
+//
+
+            }
+        }
+    }
+
 }
