@@ -1,6 +1,7 @@
 package com.example.pc.teachsomeafterschool;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,18 +16,20 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+
 import com.example.pc.teachsomeafterschool.Class.ClassInfoActivity_;
 import com.example.pc.teachsomeafterschool.Class.DrawerClassListAdapter;
 import com.example.pc.teachsomeafterschool.Infra.DBHelper;
 import com.example.pc.teachsomeafterschool.Model.ClassModel;
 import com.example.pc.teachsomeafterschool.Model.Student;
 import com.example.pc.teachsomeafterschool.Student.StudentInfoActivity;
+import com.example.pc.teachsomeafterschool.Student.StudentInfoActivity_;
 import com.example.pc.teachsomeafterschool.Student.StudentListAdapter;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class ClassActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, DrawerLayout.DrawerListener, AdapterView.OnItemClickListener, View.OnClickListener {
+        implements DrawerLayout.DrawerListener, AdapterView.OnItemClickListener, View.OnClickListener {
     ImageView imgAdd;
     DBHelper db;
     LinearLayout content_fragment, nav_view;
@@ -39,7 +42,7 @@ public class ClassActivity extends AppCompatActivity
     ArrayList<ClassModel> classList;
     ArrayList<Student> studentList;
     StudentListAdapter studentAdapter;
-    ClassModel firstClass;
+    ClassModel presentClass;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
        /**/
@@ -76,22 +79,25 @@ public class ClassActivity extends AppCompatActivity
         lvclass = (ListView) findViewById(R.id.lvdrawer_class_list);
         lvclass.setOnItemClickListener(this);
 
+//Add class to class listview
+        classList = new ArrayList<ClassModel>();
+        classList = db.getAllClasses();
+        classAdapter = new DrawerClassListAdapter(this, R.layout.drawer_class_list_item, classList);
+        lvclass.setAdapter(classAdapter);
+//        lvclass.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+//        lvclass.setSelection(0);
+        presentClass = classList.get(0);
+//Add to student list
         studentList = new ArrayList<Student>();
         Student firstStudent = new Student();
         firstStudent.setFull_name("Tan Vinh Tam");
         studentList.add(firstStudent);
         Student secondStudent = new Student();
         secondStudent.setFull_name("Tan Thi Oanh");
-
         studentList.add(secondStudent);
+
         studentAdapter = new StudentListAdapter(this, R.layout.student_list_item, studentList);
         lvstudent.setAdapter(studentAdapter);
-
-        classList = new ArrayList<ClassModel>();
-        classList = db.getAllClasses();
-        classAdapter = new DrawerClassListAdapter(this, R.layout.drawer_class_list_item, classList);
-        lvclass.setAdapter(classAdapter);
-
     }
 
     public void onBackPressed() {
@@ -125,35 +131,11 @@ public class ClassActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camara) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
     @Override
     public void onDrawerSlide(View drawerView, float slideOffset) {
         if (nav_view != null && content_fragment != null) {
             // Get the width of the NavigationDrawerFragment
             int width = nav_view.getWidth();
-
             // Set the translationX of the Fragment's View to be the offset (a percentage)
             // times the width of the NavigationDrawerFragment
             content_fragment.setTranslationX(width * slideOffset);
@@ -178,16 +160,24 @@ public class ClassActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if(parent.getId()== R.id.lvdrawer_class_list) {
-            lvstudent.setAdapter(null);
-            Student thirdStudent = new Student();
-            thirdStudent.setFull_name("Nguyen Duc Hien");
+            presentClass = classList.get(position);
+            for(int a = 0; a < parent.getChildCount(); a++)
+            {
+                parent.getChildAt(a).setBackgroundColor(getResources().getColor(R.color.burlywood));
+            }
+
+            view.setBackgroundColor(Color.RED);
+//            lvstudent.setAdapter(null);
+//            Student thirdStudent = new Student();
+//            thirdStudent.setFull_name("Nguyen Duc Hien");
             studentList.clear();
-            studentList.add(thirdStudent);
+//            studentList.add(thirdStudent);
+            studentList = db.getAllStudents(presentClass.getId());
             studentAdapter = new StudentListAdapter(this, R.layout.student_list_item, studentList);
             lvstudent.setAdapter(studentAdapter);
         }
         if(parent.getId()==R.id.lvstudent_list){
-            Intent intent = new Intent(ClassActivity.this, StudentInfoActivity.class);
+            Intent intent = new Intent(ClassActivity.this, StudentInfoActivity_.class);
             startActivity(intent);
         }
     }

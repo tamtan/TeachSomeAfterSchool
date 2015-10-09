@@ -4,10 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.AnyRes;
-import android.support.annotation.ColorRes;
-import android.support.annotation.StringRes;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,16 +47,6 @@ public class ClassInfoActivity extends Activity {
     Button btOk, btEdit, btCancel;
     @ViewById
     TextView tvStartTime, tvStopTime;
-
-//    @StringRes
-//    String start;
-////    @StringRes(R.string.stop)
-//    int stop;
-//    @StringRes(R.string.start)
-//    int two;
-//    @StringRes
-//    String monday, tuesday, wednesday, thursday, friday, saturday, sunday;
-//
 
     ArrayList<WeekDay> weekDays;
     String weekTime;
@@ -209,25 +195,25 @@ public class ClassInfoActivity extends Activity {
     private void MarkScheduleDays(ArrayList<WeekDay> weekDays) {
         for (WeekDay day : weekDays) {
             switch (day.getDay()) {
-                case Const.monday:
+                case Const.MONDAY:
                     tvMonday.setBackgroundColor(Color.GRAY);
                     break;
-                case Const.tuesday:
+                case Const.TUESDAY:
                     tvTuesday.setBackgroundColor(Color.GRAY);
                     break;
-                case Const.wednesday:
+                case Const.WEDNESDAY:
                     tvWednesday.setBackgroundColor(Color.GRAY);
                     break;
-                case Const.thursday:
+                case Const.THURSDAY:
                     tvThursday.setBackgroundColor(Color.GRAY);
                     break;
-                case Const.friday:
+                case Const.FRIDAY:
                     tvFriday.setBackgroundColor(Color.GRAY);
                     break;
-                case Const.saturday:
+                case Const.SATURDAY:
                     tvSaturday.setBackgroundColor(Color.GRAY);
                     break;
-                case Const.sunday:
+                case Const.SUNDAY:
                     tvSunday.setBackgroundColor(Color.GRAY);
                     break;
 
@@ -279,7 +265,7 @@ public class ClassInfoActivity extends Activity {
         int tuition = Integer.valueOf(edtTuition.getText().toString());
         classModel.setName(name);
         classModel.setStartingTime(getDateTime());
-        classModel.setIsFinish(Const.notFinisth);
+        classModel.setIsFinish(Const.NOT_FINISTH);
         classModel.setTuition(tuition);
         long classId = db.createClass(classModel);
         weekSchedule.setWeekTime(ConvertWeekSchedultToString(weekDays));

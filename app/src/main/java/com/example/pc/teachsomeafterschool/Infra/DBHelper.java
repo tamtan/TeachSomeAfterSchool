@@ -8,8 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.pc.teachsomeafterschool.Model.ClassModel;
+import com.example.pc.teachsomeafterschool.Model.Student;
 import com.example.pc.teachsomeafterschool.Model.WeekSchedule;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -249,7 +251,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     /*
-     * Creating a sdudent
+     * Creating a student
      */
     public long createStudent(com.example.pc.teachsomeafterschool.Model.Student student) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -265,6 +267,11 @@ public class DBHelper extends SQLiteOpenHelper {
         // insert row
         long student_id = db.insert(TABLE_STUDENT, null, values);
         return student_id;
+    }
+
+    public ArrayList<Student> getAllStudents(int classId){
+        ArrayList<Student> result = new ArrayList<Student>();
+        return result;
     }
 
 
