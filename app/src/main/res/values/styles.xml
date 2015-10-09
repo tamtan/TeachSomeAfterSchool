@@ -36,4 +36,11 @@
         <item name="android:background">@color/white</item>
     </style>
 
+    <style name="imgSex">
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+    </style>
+
+    <!--student activity-->
 </resources>

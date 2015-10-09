@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.pc.teachsomeafterschool.Model.ClassModel;
+import com.example.pc.teachsomeafterschool.Model.WeekSchedule;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -161,6 +162,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_STUDENT_TUITION);
         db.execSQL(CREATE_TABLE_WEEK_SCHEDULE);
         db.execSQL(CREATE_TABLE_CLASS_WEEK_SCHEDULE);
+
     }
 
     @Override
@@ -190,7 +192,6 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_STARTING_TIME, getDateTime());
         values.put(KEY_IS_FINISH, instant.isFinish());
         values.put(KEY_TUITION, instant.getTuition());
-
         // insert row
         long todo_id = db.insert(TABLE_CLASS, null, values);
         return todo_id;
@@ -332,4 +333,24 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
+    public long createWeekSchedule(WeekSchedule weekSchedule) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_WEEK_TIME, weekSchedule.getWeekTime());
+
+        // insert row
+        long weekScheduleId = db.insert(TABLE_WEEK_SCHEDULE, null, values);
+        return weekScheduleId;
+    }
+
+    public long createClass_WeekSchedule(long classId, long weekScheduleId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_CLASS_ID, classId);
+        values.put(KEY_WEEK_SCHEDULE_ID, weekScheduleId);
+        // insert row
+        long class_weekScheduleId = db.insert(TABLE_CLASS_WEEK_SCHEDULE, null, values);
+        return class_weekScheduleId;
+    }
 }

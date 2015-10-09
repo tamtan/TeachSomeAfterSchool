@@ -48,37 +48,14 @@ public class ClassActivity extends AppCompatActivity
 
         ////////////// Testing
         db = new DBHelper(getApplicationContext());
-        Date date = new Date();
-        firstClass = new ClassModel("jf", date.toString(), 1, 1000);
-        long i = db.createClass(firstClass);
-        firstClass = new ClassModel("fjf", date.toString(), 1, 1000);
-        long i2 = db.createClass(firstClass);
-        firstClass = new ClassModel("fhj", date.toString(), 1, 1000);
-        long i3 = db.createClass(firstClass);
-        firstClass = new ClassModel("jfg", date.toString(), 1, 1000);
-        long i4 = db.createClass(firstClass);
-        firstClass = new ClassModel("lk", date.toString(), 1, 1000);
-        long i5 = db.createClass(firstClass);
-        firstClass = new ClassModel("utgj", date.toString(), 1, 1000);
-        long i8 = db.createClass(firstClass);
-
-
-
-        /////////////////////////////////
         init();
+    }
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
-        //nav_view.setNavigationItemSelectedListener(this);
-        //
-        // nav_view = (TextView) findViewById(R.id.nav_view);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        classList = db.getAllClasses();
+        classAdapter.notifyDataSetChanged();
     }
 
     public void init() {

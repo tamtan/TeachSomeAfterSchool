@@ -11,4 +11,6 @@ public class Const {
     public static final String friday = "6";
     public static final String saturday = "7";
     public static final String sunday = "CN";
+    public static final int notFinisth = 0;
+    public static final int finish =1;
 }
