@@ -23,7 +23,7 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".Student.StudentInfoActivity"
+        <activity android:name=".Student.StudentInfoActivity_"
             ></activity>
 
     </application>
