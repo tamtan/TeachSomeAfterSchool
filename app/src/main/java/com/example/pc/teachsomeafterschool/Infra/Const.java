@@ -4,11 +4,15 @@ package com.example.pc.teachsomeafterschool.Infra;
  * Created by pc on 10/8/2015.
  */
 public class Const {
-    public static final String monday = "2";
-    public static final String tuesday = "3";
-    public static final String wednesday = "4";
-    public static final String thursday = "5";
-    public static final String friday = "6";
-    public static final String saturday = "7";
-    public static final String sunday = "CN";
+    public static final int MONDAY = 2;
+    public static final int TUESDAY = 3;
+    public static final int WEDNESDAY = 4;
+    public static final int THURSDAY = 5;
+    public static final int FRIDAY = 6;
+    public static final int SATURDAY = 7;
+    public static final int SUNDAY = 8;
+    public static final int NOT_FINISTH = 0;
+    public static final int FINISH =1;
+    public static final int MALE =1;
+    public static final int FEMALE =1;
 }

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -43,6 +44,8 @@ public class ClassInfoActivity extends Activity {
     Button btOk, btEdit, btCancel;
     @ViewById
     TextView tvStartTime, tvStopTime;
+    @ViewById
+    ImageView imgBack, imgOk;
 
 //    @StringRes
 //    String start;
@@ -60,6 +63,7 @@ public class ClassInfoActivity extends Activity {
     ClassModel classModel;
     WeekDay chosenDay;
     boolean isStartFinish, isStopFinish;
+    private boolean dataOk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +162,9 @@ public class ClassInfoActivity extends Activity {
             String time = Integer.toString(hour) + ":" + Integer.toString(minute);
             tvStopTime.setText(time);
             isStopFinish = true;
+
+        }
+        if(isStartFinish&&isStopFinish){
             if (!isDayExisted(chosenDay, weekDays)) {
                 Add(chosenDay, weekDays);
             } else {
@@ -166,7 +173,6 @@ public class ClassInfoActivity extends Activity {
             if (tpTimePicker.getVisibility() == View.VISIBLE) {
                 tpTimePicker.setVisibility(View.INVISIBLE);
             }
-
         }
     }
 
@@ -190,34 +196,118 @@ public class ClassInfoActivity extends Activity {
             return false;
         }
     }
+    
+    @Click({R.id.imgBack, R.id.imgOk})
+    public void clickOnActionBar(View v){
+        switch (v.getId()){
+            case R.id.imgBack:
+                onBackPressed();
+                break;
+            case R.id.imgOk:
+                if(isDataOk()){
+                    SaveData();
+                }else{
+                    
+                }
+                
+                break;
+        }
+    }
+
+    private void SaveData() {
+        
+    }
 
     private void MarkScheduleDays(ArrayList<WeekDay> weekDays) {
-        for (WeekDay day : weekDays) {
-            switch (day.getDay()) {
-                case Const.monday:
-                    tvMonday.setBackgroundColor(Color.GRAY);
-                    break;
-                case Const.tuesday:
-                    tvTuesday.setBackgroundColor(Color.GRAY);
-                    break;
-                case Const.wednesday:
-                    tvWednesday.setBackgroundColor(Color.GRAY);
-                    break;
-                case Const.thursday:
-                    tvThursday.setBackgroundColor(Color.GRAY);
-                    break;
-                case Const.friday:
-                    tvFriday.setBackgroundColor(Color.GRAY);
-                    break;
-                case Const.saturday:
-                    tvSaturday.setBackgroundColor(Color.GRAY);
-                    break;
-                case Const.sunday:
-                    tvSunday.setBackgroundColor(Color.GRAY);
-                    break;
+        if(weekDays.size()==0){
+            tvMonday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
+            tvTuesday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
+            tvWednesday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
+            tvThursday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
+            tvFriday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
+            tvSaturday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
+            tvSunday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
+            return;
+        }
+        for (int i = 2; i <= 8; i++) {
+            switch(i){
 
+                case Const.MONDAY:
+                    for (WeekDay day : weekDays) {
+                        if (day.getDay().equals(Integer.toString(i))) {
+                            tvMonday.setBackgroundColor(Color.GRAY);
+                        }
+                        else{
+                            tvMonday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
+                        }
+                    }
+                    break;
+                case Const.TUESDAY:
+                    for (WeekDay day : weekDays) {
+                        if (day.getDay().equals(Integer.toString(i))) {
+                            tvTuesday.setBackgroundColor(Color.GRAY);
+                        }
+                        else{
+                            tvTuesday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
+                        }
+                    }
+                    break;
+                case Const.WEDNESDAY:
+                    for (WeekDay day : weekDays) {
+                        if (day.getDay().equals(Integer.toString(i))) {
+                            tvWednesday.setBackgroundColor(Color.GRAY);
+                        }
+                        else{
+                            tvWednesday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
+                        }
+                    }
+                    break;
+                case Const.THURSDAY:
+                    for (WeekDay day : weekDays) {
+                        if (day.getDay().equals(Integer.toString(i))) {
+                            tvThursday.setBackgroundColor(Color.GRAY);
+                        }
+                        else{
+                            tvThursday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
+                        }
+                    }
+                    break;
+                case Const.FRIDAY:
+                    for (WeekDay day : weekDays) {
+                        if (day.getDay().equals(Integer.toString(i))) {
+                            tvFriday.setBackgroundColor(Color.GRAY);
+                        }
+                        else{
+                            tvFriday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
+                        }
+                    }
+                    break;
+                case Const.SATURDAY:
+                    for (WeekDay day : weekDays) {
+                        if (day.getDay().equals(Integer.toString(i))) {
+                            tvSaturday.setBackgroundColor(Color.GRAY);
+                        }
+                        else{
+                            tvSaturday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
+                        }
+                    }
+                    break;
+                case Const.SUNDAY:
+                    for (WeekDay day : weekDays) {
+                        if (day.getDay().equals(Integer.toString(i))) {
+                            tvSunday.setBackgroundColor(Color.GRAY);
+                        }
+                        else{
+                            tvSunday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
+                        }
+                    }
+                    break;
             }
         }
     }
 
+    public boolean isDataOk() {
+        boolean dataOk=false;
+        return dataOk;
+    }
 }
