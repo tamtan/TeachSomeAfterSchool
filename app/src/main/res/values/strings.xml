@@ -48,4 +48,7 @@
     <string name="avatar">Chọn ảnh</string>
     <string name="male">Nam</string>
     <string name="female">Nữ</string>
+    <string name="image_chooser_recommend">Chọn ảnh từ</string>
+    <string name="tvGallery">Thư mục ảnh</string>
+    <string name="tvCamera">Chụp ảnh</string>
 </resources>

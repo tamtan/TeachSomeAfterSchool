@@ -86,7 +86,10 @@ public class ClassActivity extends AppCompatActivity
         lvclass.setAdapter(classAdapter);
 //        lvclass.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 //        lvclass.setSelection(0);
-        presentClass = classList.get(0);
+        if(classList.size()>0){
+            presentClass = classList.get(0);
+        }
+
 //Add to student list
         studentList = new ArrayList<Student>();
         Student firstStudent = new Student();
