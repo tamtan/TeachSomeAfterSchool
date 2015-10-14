@@ -12,7 +12,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
@@ -25,15 +24,15 @@ import android.widget.Toast;
 import com.example.pc.teachsomeafterschool.Infra.Const;
 import com.example.pc.teachsomeafterschool.Model.Student;
 import com.example.pc.teachsomeafterschool.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by TAM on 06-Oct-15.
@@ -42,7 +41,7 @@ import java.util.Date;
 public class StudentInfoActivity extends Activity {
     private static final int REQUEST_LOAD_IMAGE = 1;
     private static final int REQUEST_IMAGE_CAPTURE = 2;
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 3 ;
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 3;
     @ViewById
     EditText edtStudent_class, edtStudent_full_name, edtStudent_phone_number, edtStudent_real_class, edtStudent_school, edtStudent_address;
     @ViewById
@@ -55,12 +54,91 @@ public class StudentInfoActivity extends Activity {
     Student studentModel;
     String avatarURL;
     ImageRecommendDialog imageDig;
-    Uri imageUri                      = null;
+    Uri imageUri = null;
+    DisplayImageOptions options;
+    private ImageLoader imageLoader;
+
+    public static String convertImageUriToFile(Uri imageUri, Activity activity) {
+        Cursor cursor = null;
+        int imageID = 0;
+        try {
+            /*********** Which columns values want to get *******/
+            String[] proj = {
+                    MediaStore.Images.Media.DATA,
+                    MediaStore.Images.Media._ID,
+                    MediaStore.Images.Thumbnails._ID,
+                    MediaStore.Images.ImageColumns.ORIENTATION
+            };
+
+            cursor = activity.managedQuery(
+
+                    imageUri,         //  Get data for specific image URI
+                    proj,             //  Which columns to return
+                    null,             //  WHERE clause; which rows to return (all rows)
+                    null,             //  WHERE clause selection arguments (none)
+                    null              //  Order-by clause (ascending by name)
+
+            );
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
+            int columnIndexThumb = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
+            int file_ColumnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+
+            //int orientation_ColumnIndex = cursor.
+            //    getColumnIndexOrThrow(MediaStore.Images.ImageColumns.ORIENTATION);
+
+            int size = cursor.getCount();
+
+            /*******  If size is 0, there are no images on the SD Card. *****/
+
+            if (size == 0) {
+            } else {
+
+                int thumbID = 0;
+                if (cursor.moveToFirst()) {
+
+                    /**************** Captured image details ************/
+
+                    /*****  Used to show image on view in LoadImagesFromSDCard class ******/
+                    imageID = cursor.getInt(columnIndex);
+
+                    thumbID = cursor.getInt(columnIndexThumb);
+
+                    String Path = cursor.getString(file_ColumnIndex);
+
+                    //String orientation =  cursor.getString(orientation_ColumnIndex);
+
+                    String CapturedImageDetails = " CapturedImageDetails : \n\n"
+                            + " ImageID :" + imageID + "\n"
+                            + " ThumbID :" + thumbID + "\n"
+                            + " Path :" + Path + "\n";
+
+                    // Show Captured Image detail on activity
+                    //tvAvatar.setText( CapturedImageDetails );
+
+                }
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        // Return Captured Image ImageID ( By this ImageID Image will load from sdcard )
+
+        return "" + imageID;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+        imageLoader.getInstance().init(config);
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.avatar) // resource or drawable
+                .showImageForEmptyUri(R.drawable.avatar) // resource or drawable
+                .showImageOnFail(R.drawable.avatar)
+                .bitmapConfig(Bitmap.Config.ARGB_8888)
+                .build();
     }
 
     @Override
@@ -144,22 +222,19 @@ public class StudentInfoActivity extends Activity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-            imgAvatar.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            imgAvatar.setBackgroundColor(getResources().getColor(R.color.gray));
-            studentModel.setImage_url(picturePath);
-//            imgAvatar.setBackground(getResources().getDrawable(R.drawable.avatar));
-
-//        Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        startActivityForResult(i, 1);
+            imageLoader.displayImage(selectedImage.getEncodedPath(), imgAvatar);
+//            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//
+//            Cursor cursor = getContentResolver().query(selectedImage,
+//                    filePathColumn, null, null, null);
+//            cursor.moveToFirst();
+//
+//            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//            String picturePath = cursor.getString(columnIndex);
+//            cursor.close();
+//            imgAvatar.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//            imgAvatar.setBackgroundColor(getResources().getColor(R.color.gray));
+//            studentModel.setImage_url(picturePath);
         }
 
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
@@ -183,9 +258,11 @@ public class StudentInfoActivity extends Activity {
             Toast.makeText(this, " Picture was not taken ", Toast.LENGTH_SHORT).show();
         }
     }
+
     class ImageRecommendDialog extends Dialog implements View.OnClickListener {
         Context context;
         TextView tvGallery, tvCamera;
+
         public ImageRecommendDialog(Context context) {
             super(context);
             this.context = context;
@@ -233,85 +310,16 @@ public class StudentInfoActivity extends Activity {
         }
 
     }
-    public static String convertImageUriToFile ( Uri imageUri, Activity activity )  {
-        Cursor cursor = null;
-        int imageID = 0;
-        try {
-            /*********** Which columns values want to get *******/
-            String [] proj={
-                    MediaStore.Images.Media.DATA,
-                    MediaStore.Images.Media._ID,
-                    MediaStore.Images.Thumbnails._ID,
-                    MediaStore.Images.ImageColumns.ORIENTATION
-            };
 
-            cursor = activity.managedQuery(
-
-                    imageUri,         //  Get data for specific image URI
-                    proj,             //  Which columns to return
-                    null,             //  WHERE clause; which rows to return (all rows)
-                    null,             //  WHERE clause selection arguments (none)
-                    null              //  Order-by clause (ascending by name)
-
-            );
-            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
-            int columnIndexThumb = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
-            int file_ColumnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-
-            //int orientation_ColumnIndex = cursor.
-            //    getColumnIndexOrThrow(MediaStore.Images.ImageColumns.ORIENTATION);
-
-            int size = cursor.getCount();
-
-            /*******  If size is 0, there are no images on the SD Card. *****/
-
-            if (size == 0) {
-            }
-            else
-            {
-
-                int thumbID = 0;
-                if (cursor.moveToFirst()) {
-
-                    /**************** Captured image details ************/
-
-                    /*****  Used to show image on view in LoadImagesFromSDCard class ******/
-                    imageID     = cursor.getInt(columnIndex);
-
-                    thumbID     = cursor.getInt(columnIndexThumb);
-
-                    String Path = cursor.getString(file_ColumnIndex);
-
-                    //String orientation =  cursor.getString(orientation_ColumnIndex);
-
-                    String CapturedImageDetails = " CapturedImageDetails : \n\n"
-                            +" ImageID :"+imageID+"\n"
-                            +" ThumbID :"+thumbID+"\n"
-                            +" Path :"+Path+"\n";
-
-                    // Show Captured Image detail on activity
-                    //tvAvatar.setText( CapturedImageDetails );
-
-                }
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        // Return Captured Image ImageID ( By this ImageID Image will load from sdcard )
-
-        return ""+imageID;
-    }
-    public class LoadImagesFromSDCard  extends AsyncTask<String, Void, Void> {
-        private ProgressDialog Dialog = new ProgressDialog(StudentInfoActivity.this);
+    public class LoadImagesFromSDCard extends AsyncTask<String, Void, Void> {
         Bitmap mBitmap;
+        private ProgressDialog Dialog = new ProgressDialog(StudentInfoActivity.this);
 
         protected void onPreExecute() {
             Dialog.setMessage(" Loading image from Sdcard..");
             Dialog.show();
         }
+
         // Call after onPreExecute method
         protected Void doInBackground(String... urls) {
             Bitmap bitmap = null;
@@ -352,23 +360,20 @@ public class StudentInfoActivity extends Activity {
                 /********* Cancel execution of this task. **********/
                 cancel(true);
             }
-
+//            ImageLoader imageLoader = ImageLoader.getInstance();
+//            imageLoader.displayImage(url, imageView, options);
             return null;
         }
 
 
         protected void onPostExecute(Void unused) {
             Dialog.dismiss();
-            if(mBitmap != null)
-            {
-                imgAvatar.setImageBitmap(mBitmap);
+            if (mBitmap != null) {
+                //imgAvatar.setImageBitmap(mBitmap);
             }
 
         }
-
-
-
-}
+    }
 
 }
 

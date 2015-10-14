@@ -46,4 +46,5 @@ dependencies {
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
     compile files('libs/universal-image-loader-1.9.3.jar')
+    compile files('libs/universal-image-loader-1.9.4.jar')
 }
