@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
@@ -27,6 +28,9 @@ import com.example.pc.teachsomeafterschool.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
@@ -131,14 +135,26 @@ public class StudentInfoActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
-        imageLoader.getInstance().init(config);
+//        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+//        imageLoader.getInstance().init(config);
+//        options = new DisplayImageOptions.Builder()
+//                .showImageOnLoading(R.drawable.avatar) // resource or drawable
+//                .showImageForEmptyUri(R.drawable.avatar) // resource or drawable
+//                .showImageOnFail(R.drawable.avatar)
+//                .considerExifParams(true)
+//                .bitmapConfig(Bitmap.Config.ARGB_8888)
+//                .cacheInMemory(false)
+//                .build();
+        imageLoader = ImageLoader.getInstance();
+
+        imageLoader.init(ImageLoaderConfiguration
+                .createDefault(getApplicationContext()));
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.drawable.avatar) // resource or drawable
                 .showImageForEmptyUri(R.drawable.avatar) // resource or drawable
                 .showImageOnFail(R.drawable.avatar)
-                .bitmapConfig(Bitmap.Config.ARGB_8888)
-                .build();
+                .bitmapConfig(Bitmap.Config.ARGB_8888).cacheInMemory(false)
+                .considerExifParams(true).build();
     }
 
     @Override
@@ -221,39 +237,104 @@ public class StudentInfoActivity extends Activity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-            Uri selectedImage = data.getData();
-            imageLoader.displayImage(selectedImage.getEncodedPath(), imgAvatar);
-//            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-//
-//            Cursor cursor = getContentResolver().query(selectedImage,
-//                    filePathColumn, null, null, null);
-//            cursor.moveToFirst();
-//
-//            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//            String picturePath = cursor.getString(columnIndex);
-//            cursor.close();
+            Uri imageUri = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getContentResolver().query(imageUri,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
 //            imgAvatar.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 //            imgAvatar.setBackgroundColor(getResources().getColor(R.color.gray));
-//            studentModel.setImage_url(picturePath);
+//            imageLoader.displayImage(selectedImage.getEncodedPath(), imgAvatar);
+            ImageSize targetSize = new ImageSize(200, 200);
+
+            imageLoader.loadImage("file://"+picturePath, targetSize, options,
+                    new SimpleImageLoadingListener() {
+                        ProgressDialog dialog = new ProgressDialog(StudentInfoActivity.this);
+                        @Override
+                        public void onLoadingStarted(String imageUri,
+                                                     View view) {
+
+                            dialog.show();
+
+                        }
+
+                        @Override
+                        public void onLoadingFailed(String imageUri,
+                                                    View view, FailReason failReason) {
+//                             TODO Auto-generated method stub
+                            super.onLoadingFailed(imageUri, view,
+                                    failReason);
+                            dialog.dismiss();
+
+
+                        }
+
+                        @Override
+                        public void onLoadingComplete(String imageUri,
+                                                      View view1, Bitmap loadedImage) {
+                            dialog.dismiss();
+                            imgAvatar.setImageBitmap(loadedImage);
+
+                        }
+                    });
+            studentModel.setImage_url(picturePath);
         }
 
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             /*********** Load Captured Image And Data Start ****************/
 
-            String imageId = convertImageUriToFile(imageUri, StudentInfoActivity.this);
-
+//            String imageID = convertImageUriToFile(imageUri, StudentInfoActivity.this);
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getContentResolver().query(imageUri,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
 
             //  Create and excecute AsyncTask to load capture image
 
-            new LoadImagesFromSDCard().execute("" + imageId);
+//            new LoadImagesFromSDCard().execute("" + imageId);
 
             /*********** Load Captured Image And Data End ****************/
+            ImageSize targetSize = new ImageSize(200, 200);
+            Log.d("imageId", picturePath);
+            imageLoader.loadImage("file://"+picturePath, targetSize, options,
+                    new SimpleImageLoadingListener() {
+                        ProgressDialog dialog = new ProgressDialog(StudentInfoActivity.this);
+                        @Override
+                        public void onLoadingStarted(String imageUri,
+                                                     View view) {
 
+                            dialog.show();
+
+                        }
+
+                        @Override
+                        public void onLoadingFailed(String imageUri,
+                                                    View view, FailReason failReason) {
+//                             TODO Auto-generated method stub
+                            super.onLoadingFailed(imageUri, view,
+                                    failReason);
+                            dialog.dismiss();
+
+
+                        }
+
+                        @Override
+                        public void onLoadingComplete(String imageUri,
+                                                      View view1, Bitmap loadedImage) {
+                            dialog.dismiss();
+                            imgAvatar.setImageBitmap(loadedImage);
+
+                        }
+                    });
+            studentModel.setImage_url(picturePath);
 
         } else if (resultCode == RESULT_CANCELED) {
-
-            Toast.makeText(this, " Picture was not taken ", Toast.LENGTH_SHORT).show();
-        } else {
 
             Toast.makeText(this, " Picture was not taken ", Toast.LENGTH_SHORT).show();
         }

@@ -34,12 +34,30 @@
 
     <style name="tvTuition" parent="tvWeek_day">
         <item name="android:background">@color/white</item>
+
+    </style>
+    <style name="tvHeader4" parent="tvWeek_day">
+        <item name="android:background">@color/white</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="imgSex">
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_marginBottom">10dp</item>
         <item name="android:layout_marginRight">10dp</item>
+    </style>
+
+    <style name="tvNormal" parent="tvWeek_day">
+        <item name="android:textSize">8pt</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="imgChecbox">
+        <item name="android:layout_margin">10dp</item>
+    </style>
+
+    <style name="tvMonth">
+        <item name="android:textStyle">bold</item>
     </style>
 
     <!--student activity-->

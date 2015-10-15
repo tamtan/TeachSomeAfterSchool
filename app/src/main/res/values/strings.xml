@@ -51,4 +51,18 @@
     <string name="image_chooser_recommend">Chọn ảnh từ</string>
     <string name="tvGallery">Thư mục ảnh</string>
     <string name="tvCamera">Chụp ảnh</string>
+    <string name="jan">01</string>
+    <string name="feb">02</string>
+    <string name="mar">03</string>
+    <string name="apr">04</string>
+    <string name="may">05</string>
+    <string name="jun">06</string>
+    <string name="jul">07</string>
+    <string name="aug">08</string>
+    <string name="sep">09</string>
+    <string name="oct">10</string>
+    <string name="nov">11</string>
+    <string name="dec">12</string>
+    <string name="total">Tổng:</string>
+    <string name="Indebt">Nợ:</string>
 </resources>
