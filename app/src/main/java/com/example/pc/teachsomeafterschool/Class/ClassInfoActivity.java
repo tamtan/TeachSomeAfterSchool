@@ -275,14 +275,6 @@ public class ClassInfoActivity extends Activity {
         weekDays.add(chosenDay);
     }
 
-    private boolean isDayExisted(WeekDay chosenDay, ArrayList<WeekDay> weekDays) {
-        if (weekDays.contains(chosenDay)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     private boolean isDayExisted1(WeekDay chosenDay, ArrayList<WeekDay> weekDays) {
         if (weekDays.size() != 0) {
             for (WeekDay day : weekDays) {

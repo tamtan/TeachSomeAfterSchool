@@ -21,8 +21,9 @@ public class DrawerClassListAdapter extends ArrayAdapter<ClassModel> {
     Context context;
     ArrayList<ClassModel> classList;
     ArrayList<WeekDay> weekDays;
+    String monday, tuesday, wednesday, thursday, friday, saturday, sunday;
     public DrawerClassListAdapter(Context context, int layout,ArrayList<ClassModel> classList){
-        super(context,layout,classList);
+        super(context, layout, classList);
         this.layout = layout;
         this.context = context;
         this.classList = classList;
@@ -50,12 +51,34 @@ public class DrawerClassListAdapter extends ArrayAdapter<ClassModel> {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.tvclass_name.setText(classList.get(position).getName());
-        weekDays = new ArrayList<WeekDay>();
-        weekDays = getWeekSchedule(classList.get(position));
-        for(WeekDay day: weekDays){
-            switch (day.getDay()){
-            }
-        }
+//        weekDays = new ArrayList<WeekDay>();
+//        weekDays = getWeekSchedule(classList.get(position));
+//        for(WeekDay day: weekDays){
+//
+//            switch (day.getDay()){
+//                case "2":
+//                    holder.tvmonday.setBackground(context.getResources().getDrawable(R.drawable.weekly_rounded_button_scheduled));
+//                    break;
+//                case "3":
+//                    holder.tvtuesday.setBackground(context.getResources().getDrawable(R.drawable.weekly_rounded_button_scheduled));
+//                    break;
+//                case "4":
+//                    holder.tvwednesday.setBackground(context.getResources().getDrawable(R.drawable.weekly_rounded_button_scheduled));
+//                    break;
+//                case "5":
+//                    holder.tvthusday.setBackground(context.getResources().getDrawable(R.drawable.weekly_rounded_button_scheduled));
+//                    break;
+//                case "6":
+//                    holder.tvfriday.setBackground(context.getResources().getDrawable(R.drawable.weekly_rounded_button_scheduled));
+//                    break;
+//                case "7":
+//                    holder.tvsaturday.setBackground(context.getResources().getDrawable(R.drawable.weekly_rounded_button_scheduled));
+//                    break;
+//                case "8":
+//                    holder.tvsunday.setBackground(context.getResources().getDrawable(R.drawable.weekly_rounded_button_scheduled));
+//                    break;
+//            }
+//        }
         return convertView;
     }
 
