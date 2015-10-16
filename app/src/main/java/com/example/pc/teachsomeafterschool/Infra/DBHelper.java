@@ -196,6 +196,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 cl.setStartingTime(c.getString(c.getColumnIndex(KEY_STARTING_TIME)));
                 cl.setTuition(c.getInt(c.getColumnIndex(KEY_TUITION)));
                 cl.setIsFinish(c.getInt(c.getColumnIndex(KEY_IS_FINISH)));
+                cl.setWeekSchedule(c.getString(c.getColumnIndex(KEY_WEEK_TIME)));
                 classes.add(cl);
             } while (c.moveToNext());
         }
@@ -218,6 +219,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 cl.setStartingTime(c.getString(c.getColumnIndex(KEY_STARTING_TIME)));
                 cl.setTuition(c.getInt(c.getColumnIndex(KEY_TUITION)));
                 cl.setIsFinish(c.getInt(c.getColumnIndex(KEY_IS_FINISH)));
+                cl.setWeekSchedule(c.getString(c.getColumnIndex(KEY_WEEK_TIME)));
                 classes.add(cl);
             } while (c.moveToNext());
         }

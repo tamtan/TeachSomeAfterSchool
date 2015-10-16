@@ -296,7 +296,6 @@ public class ClassInfoActivity extends Activity {
             case R.id.imgOk:
                 if (isDataOk()) {
                     long id = SaveData();
-                    String t = "";
                 } else {
 
                 }
