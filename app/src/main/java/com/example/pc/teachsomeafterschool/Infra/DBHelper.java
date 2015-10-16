@@ -9,7 +9,6 @@ import android.util.Log;
 
 import com.example.pc.teachsomeafterschool.Model.ClassModel;
 import com.example.pc.teachsomeafterschool.Model.Student;
-import com.example.pc.teachsomeafterschool.Model.WeekSchedule;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
@@ -38,11 +37,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TABLE_CLASS_STUDENT = "class_students";
     private static final String TABLE_TUITION = "tuitions";
     private static final String TABLE_STUDENT_TUITION = "student_tuitions";
-    private static final String TABLE_WEEK_SCHEDULE = "week_schedules";
-    private static final String TABLE_CLASS_WEEK_SCHEDULE = "class_week_schedule";
 
-    // WEEK SCHEDULE table - column names
-    private static final String KEY_WEEK_TIME = "week_time";
     // Common column names
     private static final String KEY_ID = "id";
     private static final String KEY_STUDENT_ID = "student_id";
@@ -52,6 +47,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_STARTING_TIME = "startingTime";
     private static final String KEY_IS_FINISH = "isFinish";
     private static final String KEY_TUITION = "tuition";
+    private static final String KEY_WEEK_TIME = "week_time";
 
     // STUDENTS Table - column names
     private static final String KEY_FULL_NAME = "full_name";
@@ -102,7 +98,7 @@ public class DBHelper extends SQLiteOpenHelper {
     // CLASS table create statement
     private static final String CREATE_TABLE_CLASS = "CREATE TABLE " + TABLE_CLASS
             + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-            + KEY_STARTING_TIME + " TEXT," + KEY_IS_FINISH + " INTEGER," + KEY_TUITION + " INTEGER" + ")";
+            + KEY_STARTING_TIME + " TEXT," + KEY_IS_FINISH + " INTEGER," + KEY_TUITION + " INTEGER," + KEY_WEEK_TIME + " TEXT"+")";
 
     // TUITION table create statement
     private static final String CREATE_TABLE_TUITION = "CREATE TABLE " + TABLE_TUITION
@@ -128,20 +124,6 @@ public class DBHelper extends SQLiteOpenHelper {
             + ")";
 
 
-
-    // WEEK_SCHEDULE table create statement
-    private static final String CREATE_TABLE_WEEK_SCHEDULE = "CREATE TABLE "
-            + TABLE_WEEK_SCHEDULE + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_WEEK_TIME + " TEXT"
-            + ")";
-
-    private static final String KEY_WEEK_SCHEDULE_ID = "week_schedule_id" ;
-    // CLASS_WEEK_SCHEDULE table create statement
-    private static final String CREATE_TABLE_CLASS_WEEK_SCHEDULE = "CREATE TABLE "
-            + TABLE_CLASS_WEEK_SCHEDULE + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_CLASS_ID + " INTEGER," + KEY_WEEK_SCHEDULE_ID + " INTEGER"
-            + ")";
-
     // STUDENT_TUITION table create statement
     private static final String CREATE_TABLE_STUDENT_TUITION = "CREATE TABLE "
             + TABLE_STUDENT_TUITION + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
@@ -162,8 +144,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_CLASS_STUDENT);
         db.execSQL(CREATE_TABLE_STUDENT);
         db.execSQL(CREATE_TABLE_STUDENT_TUITION);
-        db.execSQL(CREATE_TABLE_WEEK_SCHEDULE);
-        db.execSQL(CREATE_TABLE_CLASS_WEEK_SCHEDULE);
+//        db.execSQL(CREATE_TABLE_WEEK_SCHEDULE);
+//        db.execSQL(CREATE_TABLE_CLASS_WEEK_SCHEDULE);
 
     }
 
@@ -175,9 +157,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASS_STUDENT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TUITION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STUDENT_TUITION);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WEEK_SCHEDULE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STUDENT);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASS_WEEK_SCHEDULE);
         // create new tables
         onCreate(db);
     }
@@ -194,13 +174,12 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_STARTING_TIME, Util.getDateTime());
         values.put(KEY_IS_FINISH, false);
         values.put(KEY_TUITION, instant.getTuition());
-        // insert row
+        values.put(KEY_WEEK_TIME, instant.getWeekSchedule());
         long todo_id = db.insert(TABLE_CLASS, null, values);
         return todo_id;
     }
 
 /*get all classes*/
-
     public ArrayList<ClassModel> getAllClasses(){
         ArrayList<ClassModel> classes = new ArrayList<ClassModel>();
         String selectQuery = "SELECT  * FROM " + TABLE_CLASS+" ORDER BY "+KEY_ID+" DESC";
@@ -209,8 +188,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
                 ClassModel cl = new ClassModel();
@@ -219,8 +196,28 @@ public class DBHelper extends SQLiteOpenHelper {
                 cl.setStartingTime(c.getString(c.getColumnIndex(KEY_STARTING_TIME)));
                 cl.setTuition(c.getInt(c.getColumnIndex(KEY_TUITION)));
                 cl.setIsFinish(c.getInt(c.getColumnIndex(KEY_IS_FINISH)));
+                classes.add(cl);
+            } while (c.moveToNext());
+        }
+        return classes;
+    }
+    public ArrayList<ClassModel> getClasses(String grade){
+        ArrayList<ClassModel> classes = new ArrayList<ClassModel>();
+        String selectQuery = "SELECT  * FROM " + TABLE_CLASS+ " where " + KEY_NAME + " like ?"+" ORDER BY "+KEY_ID+" DESC";
 
-                // adding to Class list
+        Log.e(LOG, selectQuery);
+        String[] para = new String[1];
+        para[0]= grade + "%";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, para);
+        if (c.moveToFirst()) {
+            do {
+                ClassModel cl = new ClassModel();
+                cl.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+                cl.setName((c.getString(c.getColumnIndex(KEY_NAME))));
+                cl.setStartingTime(c.getString(c.getColumnIndex(KEY_STARTING_TIME)));
+                cl.setTuition(c.getInt(c.getColumnIndex(KEY_TUITION)));
+                cl.setIsFinish(c.getInt(c.getColumnIndex(KEY_IS_FINISH)));
                 classes.add(cl);
             } while (c.moveToNext());
         }
@@ -230,7 +227,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /*
 	 * get single class
 	 */
-    public ClassModel getTodo(long class_id) {
+    public ClassModel getClass(long class_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String selectQuery = "SELECT  * FROM " + TABLE_CLASS + " WHERE "
@@ -330,29 +327,5 @@ public class DBHelper extends SQLiteOpenHelper {
         // insert row
         long student_tuition_id = db.insert(TABLE_STUDENT_TUITION, null, values);
         return student_tuition_id;
-    }
-
-
-
-
-    public long createWeekSchedule(WeekSchedule weekSchedule) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(KEY_WEEK_TIME, weekSchedule.getWeekTime());
-
-        // insert row
-        long weekScheduleId = db.insert(TABLE_WEEK_SCHEDULE, null, values);
-        return weekScheduleId;
-    }
-
-    public long createClass_WeekSchedule(long classId, long weekScheduleId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(KEY_CLASS_ID, classId);
-        values.put(KEY_WEEK_SCHEDULE_ID, weekScheduleId);
-        // insert row
-        long class_weekScheduleId = db.insert(TABLE_CLASS_WEEK_SCHEDULE, null, values);
-        return class_weekScheduleId;
     }
 }

@@ -19,7 +19,13 @@ public class ClassModel {
     String startingTime;
     int isFinish;
     int tuition;
-
+    String weekSchedule;
+    public String getWeekSchedule() {
+        return weekSchedule;
+    }
+    public void setWeekSchedule(String weekSchedule) {
+        this.weekSchedule = weekSchedule;
+    }
     public ClassModel(String name, String startingTime, int isFinish, int tuition){
         this.name = name;
         this.startingTime = startingTime;

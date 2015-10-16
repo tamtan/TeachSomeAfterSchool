@@ -197,9 +197,10 @@
                 </LinearLayout>
 
                 <TextView
+
                     android:gravity="center"
                     style="@style/tvTuition"
-                    android:background="@color/black"
+                    android:background="@drawable/weekly_rounded_button_chosen"
                     android:textColor="@color/white"
                     android:id="@+id/tvAvatar"
                     android:layout_width="match_parent"

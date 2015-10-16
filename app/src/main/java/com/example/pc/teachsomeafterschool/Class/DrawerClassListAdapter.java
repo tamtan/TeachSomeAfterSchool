@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.example.pc.teachsomeafterschool.Model.ClassModel;
+import com.example.pc.teachsomeafterschool.Model.WeekDay;
 import com.example.pc.teachsomeafterschool.R;
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ public class DrawerClassListAdapter extends ArrayAdapter<ClassModel> {
     int layout;
     Context context;
     ArrayList<ClassModel> classList;
+    ArrayList<WeekDay> weekDays;
     public DrawerClassListAdapter(Context context, int layout,ArrayList<ClassModel> classList){
         super(context,layout,classList);
         this.layout = layout;
@@ -48,9 +50,31 @@ public class DrawerClassListAdapter extends ArrayAdapter<ClassModel> {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.tvclass_name.setText(classList.get(position).getName());
-        String test = holder.tvclass_name.getText().toString();
+        weekDays = new ArrayList<WeekDay>();
+        weekDays = getWeekSchedule(classList.get(position));
+        for(WeekDay day: weekDays){
+            switch (day.getDay()){
+            }
+        }
         return convertView;
     }
+
+    private ArrayList<WeekDay> getWeekSchedule(ClassModel classModel) {
+        ArrayList<WeekDay> weekDays = new ArrayList<WeekDay>();
+        WeekDay weekDay;
+        String[] weekSchedule = classModel.getWeekSchedule().split("_");
+        if(weekSchedule.length  !=0){
+            for(String day : weekSchedule){
+                weekDay = new WeekDay();
+                weekDay.setDay(day.split("-")[0]);
+                weekDay.setStartTime(day.split("-")[1]);
+                weekDay.setStopTime(day.split("-")[2]);
+                weekDays.add(weekDay);
+            }
+        }
+        return weekDays;
+    }
+
     class ViewHolder{
         TextView tvclass_name, tvmonday, tvtuesday, tvwednesday, tvthusday, tvfriday, tvsaturday, tvsunday;
     }

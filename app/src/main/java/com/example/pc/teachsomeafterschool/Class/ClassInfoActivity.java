@@ -14,17 +14,20 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.pc.teachsomeafterschool.Infra.Const;
+import com.example.pc.teachsomeafterschool.Infra.DBHelper;
+import com.example.pc.teachsomeafterschool.Infra.Util;
 import com.example.pc.teachsomeafterschool.Model.ClassModel;
 import com.example.pc.teachsomeafterschool.Model.WeekDay;
-import com.example.pc.teachsomeafterschool.Model.WeekSchedule;
 import com.example.pc.teachsomeafterschool.R;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.ViewById;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -47,19 +50,7 @@ public class ClassInfoActivity extends Activity {
     TextView tvStartTime, tvStopTime;
     @ViewById
     ImageView imgBack, imgOk;
-
-//    @StringRes
-//    String start;
-////    @StringRes(R.string.stop)
-//    int stop;
-//    @StringRes(R.string.start)
-//    int two;
-//    @StringRes
-//    String monday, tuesday, wednesday, thursday, friday, saturday, sunday;
-//
-
     ArrayList<WeekDay> weekDays;
-    WeekSchedule weekSchedule;
     ClassModel classModel;
     WeekDay chosenDay, preChosenDay;
     boolean isStartFinish, isStopFinish;
@@ -82,12 +73,14 @@ public class ClassInfoActivity extends Activity {
 
     boolean dataOk;
     TextView tvChosenDay, tvPreChosenDay;
+    DBHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        db = new DBHelper(getApplicationContext());
     }
+
     @AfterViews
     void init() {
         classModel = new ClassModel();
@@ -107,10 +100,10 @@ public class ClassInfoActivity extends Activity {
         if (tvStartTime.getVisibility() == View.INVISIBLE) {
             tvStartTime.setVisibility(View.VISIBLE);
         }
-        if(tvStopTime.getVisibility()==View.INVISIBLE){
+        if (tvStopTime.getVisibility() == View.INVISIBLE) {
             tvStopTime.setVisibility(View.VISIBLE);
         }
-        if(tpTimePicker.getVisibility()==View.INVISIBLE){
+        if (tpTimePicker.getVisibility() == View.INVISIBLE) {
             tpTimePicker.setVisibility(View.VISIBLE);
         }
         switch (view.getId()) {
@@ -151,7 +144,7 @@ public class ClassInfoActivity extends Activity {
                 tvChosenDay.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_chosen));
                 if (!isDayExisted1(preChosenDay, weekDays) && tvPreChosenDay != null) {
                     tvPreChosenDay.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_nomal));
-                }else if(tvPreChosenDay != null){
+                } else if (tvPreChosenDay != null) {
                     tvPreChosenDay.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_scheduled));
                 }
                 tvPreChosenDay = tvChosenDay;
@@ -169,7 +162,7 @@ public class ClassInfoActivity extends Activity {
                 tvChosenDay.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_chosen));
                 if (!isDayExisted1(preChosenDay, weekDays) && tvPreChosenDay != null) {
                     tvPreChosenDay.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_nomal));
-                }else if(tvPreChosenDay != null){
+                } else if (tvPreChosenDay != null) {
                     tvPreChosenDay.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_scheduled));
                 }
                 tvPreChosenDay = tvChosenDay;
@@ -218,7 +211,7 @@ public class ClassInfoActivity extends Activity {
 
     @Click(R.id.tvStopTime)
     void AddNewStopTime() {
-        if(isStartFinish()) {
+        if (isStartFinish()) {
             setTvStopTimeColor();
             setIsStopFinish(false);
             tvStopTime.setText(getApplicationContext().getResources().getString(R.string.stop));
@@ -231,36 +224,40 @@ public class ClassInfoActivity extends Activity {
 
     @Click(R.id.btOk)
     void AddTime() {
-        if (!isStartFinish) {
-            int hour = tpTimePicker.getCurrentHour();
-            int minute = tpTimePicker.getCurrentMinute();
-            String hourStr = hour<10? "0"+Integer.toString(hour):Integer.toString(hour);
-            String minuteStr = minute<10? "0"+Integer.toString(minute):Integer.toString(minute);
-            String time =  hourStr+ ":" +minuteStr ;
-            tvStartTime.setText(time);
-            setIsStartFinish(true);
-            chosenDay.setStartTime(time);
-            if(!isStopFinish()){
-                setTvStopTimeColor();
+        if (chosenDay != null) {
+            if (!isStartFinish) {
+                int hour = tpTimePicker.getCurrentHour();
+                int minute = tpTimePicker.getCurrentMinute();
+                String hourStr = hour < 10 ? "0" + Integer.toString(hour) : Integer.toString(hour);
+                String minuteStr = minute < 10 ? "0" + Integer.toString(minute) : Integer.toString(minute);
+                String time = hourStr + ":" + minuteStr;
+                tvStartTime.setText(time);
+                setIsStartFinish(true);
+                chosenDay.setStartTime(time);
+                if (!isStopFinish()) {
+                    setTvStopTimeColor();
+                }
+            } else if (!isStopFinish) {
+                int hour = tpTimePicker.getCurrentHour();
+                int minute = tpTimePicker.getCurrentMinute();
+                String time = Integer.toString(hour) + ":" + Integer.toString(minute);
+                tvStopTime.setText(time);
+                setIsStopFinish(true);
+                chosenDay.setStopTime(time);
             }
-        } else if (!isStopFinish) {
-            int hour = tpTimePicker.getCurrentHour();
-            int minute = tpTimePicker.getCurrentMinute();
-            String time = Integer.toString(hour) + ":" + Integer.toString(minute);
-            tvStopTime.setText(time);
-            setIsStopFinish(true);
-            chosenDay.setStopTime(time);
-        }
-        if (isStartFinish() && isStopFinish()) {
-            setTvStartStopTimeColor();
-            if (!isDayExisted1(chosenDay, weekDays)) {
-                Add(chosenDay, weekDays);
-            } else {
-                Edit(chosenDay, weekDays);
+            if (isStartFinish() && isStopFinish()) {
+                setTvStartStopTimeColor();
+                if (!isDayExisted1(chosenDay, weekDays)) {
+                    Add(chosenDay, weekDays);
+                } else {
+                    Edit(chosenDay, weekDays);
+                }
+                if (tpTimePicker.getVisibility() == View.VISIBLE) {
+                    tpTimePicker.setVisibility(View.INVISIBLE);
+                }
             }
-            if (tpTimePicker.getVisibility() == View.VISIBLE) {
-                tpTimePicker.setVisibility(View.INVISIBLE);
-            }
+        } else {
+            Toast.makeText(ClassInfoActivity.this, getResources().getString(R.string.null_chosen_day), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -306,7 +303,8 @@ public class ClassInfoActivity extends Activity {
                 break;
             case R.id.imgOk:
                 if (isDataOk()) {
-                    SaveData();
+                    long id = SaveData();
+                    String t = "";
                 } else {
 
                 }
@@ -321,40 +319,65 @@ public class ClassInfoActivity extends Activity {
         overridePendingTransition(R.anim.slide_right_enter, R.anim.slide_right_leave);
     }
 
-    private void SaveData() {
+    private long SaveData() {
         getData();
+        long id = db.createClass(classModel);
+        return id;
+
     }
 
     public void getData() {
         String className = spGradeSelector.getSelectedItem().toString();
+        className = convertToClassName(className);
         classModel.setName(className);
         classModel.setTuition(Integer.valueOf(edtTuition.getText().toString()));
-        weekSchedule.setWeekTime(getWeekTime(weekDays));
+        classModel.setWeekSchedule(getWeekTime(weekDays));
     }
 
     private String getWeekTime(ArrayList<WeekDay> weekDays) {
-        String result  = "";
-        for(WeekDay day : weekDays){
-            result = day.getDay()+"-"+day.getStartTime()+"-"+day.getStopTime()+"_";
+        String result = "";
+        for (WeekDay day : weekDays) {
+            result += day.getDay() + "-" + day.getStartTime() + "-" + day.getStopTime() + "_";
         }
         return result;
     }
 
     public boolean isDataOk() {
         boolean dataOk = true;
+        if (edtTuition.getText().toString().equals("")) {
+            Toast.makeText(ClassInfoActivity.this, getResources().getString(R.string.miss_tuition), Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (weekDays.size() == 0) {
+            Toast.makeText(ClassInfoActivity.this, getResources().getString(R.string.miss_schedule), Toast.LENGTH_LONG).show();
+            return false;
+        }
         return dataOk;
     }
 
-    private void setTvStartTimeColor(){
+    private void setTvStartTimeColor() {
         tvStartTime.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_chosen));
         tvStopTime.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.dayly_time_rounded_button_nomal));
     }
-    private void setTvStopTimeColor(){
+
+    private void setTvStopTimeColor() {
         tvStopTime.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_chosen));
         tvStartTime.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.dayly_time_rounded_button_nomal));
     }
-    private void setTvStartStopTimeColor(){
+
+    private void setTvStartStopTimeColor() {
         tvStopTime.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.dayly_time_rounded_button_nomal));
         tvStartTime.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.dayly_time_rounded_button_nomal));
+    }
+
+    public String convertToClassName(String grade) {
+        String result = "";
+        ArrayList<ClassModel> classes = new ArrayList<ClassModel>();
+        classes = db.getClasses(grade.split(" ")[1]);
+//        classes = db.getClasses("11");
+        int orderNumber = 1 + classes.size();
+        String year = Util.getCurrentYear();
+        result += grade.split(" ")[1] + "_" + Integer.toString(orderNumber) + "_" + Util.getCurrentYear();
+        return result;
     }
 }

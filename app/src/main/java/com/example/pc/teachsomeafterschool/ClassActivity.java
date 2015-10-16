@@ -197,13 +197,13 @@ public class ClassActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if(parent.getId()== R.id.lvdrawer_class_list) {
-            presentClass = classList.get(position);
+                presentClass = classList.get(position);
             for(int a = 0; a < parent.getChildCount(); a++)
             {
-                parent.getChildAt(a).setBackgroundColor(getResources().getColor(R.color.burlywood));
+                parent.getChildAt(a).setBackgroundColor(getResources().getColor(R.color.lightgoldenrodyellow));
             }
 
-            view.setBackgroundColor(Color.RED);
+            view.setBackgroundColor(getResources().getColor(R.color.gold));
 //            lvstudent.setAdapter(null);
 //            Student thirdStudent = new Student();
 //            thirdStudent.setFull_name("Nguyen Duc Hien");

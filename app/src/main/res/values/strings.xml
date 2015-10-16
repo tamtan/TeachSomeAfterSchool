@@ -66,4 +66,7 @@
     <string name="total">Tổng:</string>
     <string name="Indebt">Nợ:</string>
     <string name="student_infor_title">Thông tin học sinh</string>
+    <string name="miss_tuition">Bạn chưa nhập số tiền</string>
+    <string name="miss_schedule">Bạn chưa chọn lịch học</string>
+    <string name="null_chosen_day">Bạn chưa chọn thứ</string>
 </resources>
