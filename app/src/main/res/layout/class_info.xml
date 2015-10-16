@@ -45,8 +45,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/gray"
-                android:inputType="number"/>
+                android:inputType="number"
+                android:gravity="right"/>
         </LinearLayout>
 
         <LinearLayout
@@ -66,7 +66,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="7"
                     android:gravity="center"
-                    android:text="@string/monday1" />
+                    android:text="@string/monday1"
+                    android:background="@drawable/weekly_rounded_button_nomal"/>
 
                 <TextView
                     android:id="@+id/tvTuesday"
@@ -75,7 +76,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="7"
                     android:gravity="center"
-                    android:text="@string/tuesday1" />
+                    android:text="@string/tuesday1"
+                    android:background="@drawable/weekly_rounded_button_nomal"/>
 
                 <TextView
                     android:id="@+id/tvWednesday"
@@ -84,7 +86,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="7"
                     android:gravity="center"
-                    android:text="@string/wednesday1" />
+                    android:text="@string/wednesday1"
+                    android:background="@drawable/weekly_rounded_button_nomal"/>
 
                 <TextView
                     android:id="@+id/tvThursday"
@@ -93,7 +96,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="7"
                     android:gravity="center"
-                    android:text="@string/thusday1" />
+                    android:text="@string/thusday1"
+                    android:background="@drawable/weekly_rounded_button_nomal"/>
 
                 <TextView
                     android:id="@+id/tvFriday"
@@ -102,7 +106,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="7"
                     android:gravity="center"
-                    android:text="@string/friday1" />
+                    android:text="@string/friday1"
+                    android:background="@drawable/weekly_rounded_button_nomal"/>
 
                 <TextView
                     android:id="@+id/tvSaturday"
@@ -111,7 +116,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="7"
                     android:gravity="center"
-                    android:text="@string/saturday1" />
+                    android:text="@string/saturday1"
+                    android:background="@drawable/weekly_rounded_button_chosen"/>
 
                 <TextView
                     android:id="@+id/tvSunday"
@@ -120,7 +126,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="7"
                     android:gravity="center"
-                    android:text="@string/sunday1" />
+                    android:text="@string/sunday1"
+                    android:background="@drawable/weekly_rounded_button_nomal"/>
             </LinearLayout>
 
             <RelativeLayout

@@ -65,4 +65,5 @@
     <string name="dec">12</string>
     <string name="total">Tổng:</string>
     <string name="Indebt">Nợ:</string>
+    <string name="student_infor_title">Thông tin học sinh</string>
 </resources>

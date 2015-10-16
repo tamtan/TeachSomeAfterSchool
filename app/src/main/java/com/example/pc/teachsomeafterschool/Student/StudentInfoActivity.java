@@ -32,6 +32,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
@@ -51,7 +52,7 @@ public class StudentInfoActivity extends Activity {
     @ViewById
     CheckBox cbMale, cbFemale;
     @ViewById
-    TextView tvAvatar;
+    TextView tvAvatar, tvTitle;
     @ViewById
     ImageView imgBack, imgOk, imgAvatar;
 
@@ -156,13 +157,18 @@ public class StudentInfoActivity extends Activity {
                 .bitmapConfig(Bitmap.Config.ARGB_8888).cacheInMemory(false)
                 .considerExifParams(true).build();
     }
+    @AfterViews
+    public void init(){
 
-    @Override
-    protected void onResume() {
-        super.onResume();
         studentModel = new Student();
         cbMale.setChecked(true);
         imageDig = new ImageRecommendDialog(this);
+        tvTitle.setText(getResources().getString(R.string.student_infor_title));
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     @Click({R.id.cbFemale, R.id.cbMale, R.id.tvAvatar, R.id.imgBack, R.id.imgOk})
@@ -185,6 +191,7 @@ public class StudentInfoActivity extends Activity {
                 break;
             case R.id.imgBack:
                 onBackPressed();
+
                 break;
             case R.id.imgOk:
                 if (isInputDataOk()) {
@@ -197,6 +204,12 @@ public class StudentInfoActivity extends Activity {
 
                 imageDig.show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_right_enter, R.anim.slide_right_leave);
     }
 
     private boolean isInputDataOk() {

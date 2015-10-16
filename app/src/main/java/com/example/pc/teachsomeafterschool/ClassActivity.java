@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -43,6 +45,10 @@ public class ClassActivity extends AppCompatActivity
     ArrayList<Student> studentList;
     StudentListAdapter studentAdapter;
     ClassModel presentClass;
+    private boolean isAddButtonClicked;
+    private Animation anim;
+    private Animation.AnimationListener animListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
        /**/
@@ -57,11 +63,15 @@ public class ClassActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        if(drawer.getVisibility()==View.INVISIBLE){
+            drawer.setVisibility(View.VISIBLE);
+        }
         classList = db.getAllClasses();
         classAdapter.notifyDataSetChanged();
     }
 
     public void init() {
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         imgAdd = (ImageView) findViewById(R.id.imgAdd);
         imgAdd.setOnClickListener(this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -101,10 +111,29 @@ public class ClassActivity extends AppCompatActivity
 
         studentAdapter = new StudentListAdapter(this, R.layout.student_list_item, studentList);
         lvstudent.setAdapter(studentAdapter);
+        animListener = new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                drawer.setVisibility(View.INVISIBLE);
+                Intent intent = new Intent(ClassActivity.this, StudentInfoActivity_.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_left_enter, R.anim.no_anim);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        };
     }
 
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -157,7 +186,12 @@ public class ClassActivity extends AppCompatActivity
 
     @Override
     public void onDrawerStateChanged(int newState) {
-
+        if(isAddButtonClicked){
+            isAddButtonClicked = false;
+            Intent intent = new Intent(ClassActivity.this, ClassInfoActivity_.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_down_enter,R.anim.slide_down_leave);
+        }
     }
 
     @Override
@@ -180,14 +214,19 @@ public class ClassActivity extends AppCompatActivity
             lvstudent.setAdapter(studentAdapter);
         }
         if(parent.getId()==R.id.lvstudent_list){
-            Intent intent = new Intent(ClassActivity.this, StudentInfoActivity_.class);
-            startActivity(intent);
+            anim = AnimationUtils.loadAnimation(ClassActivity.this,R.anim.slide_down_leave);
+            anim.setAnimationListener(animListener);
+            drawer.startAnimation(anim);
         }
     }
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(ClassActivity.this, ClassInfoActivity_.class);
-        startActivity(intent);
+        if(v.getId()==R.id.imgAdd){
+            drawer.closeDrawer(GravityCompat.START);
+            isAddButtonClicked = true;
+
+        }
+
     }
 }
