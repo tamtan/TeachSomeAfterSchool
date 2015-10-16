@@ -117,7 +117,7 @@
                     android:layout_weight="7"
                     android:gravity="center"
                     android:text="@string/saturday1"
-                    android:background="@drawable/weekly_rounded_button_chosen"/>
+                    android:background="@drawable/weekly_rounded_button_nomal"/>
 
                 <TextView
                     android:id="@+id/tvSunday"
@@ -149,7 +149,8 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/start"
-                        android:visibility="invisible"/>
+                        android:visibility="invisible"
+                        android:background="@drawable/dayly_time_rounded_button_nomal"/>
 
                     <TextView
 
@@ -160,7 +161,8 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/stop"
-                        android:visibility="invisible"/>
+                        android:visibility="invisible"
+                        android:background="@drawable/dayly_time_rounded_button_nomal"/>
                 </LinearLayout>
 
                 <LinearLayout

@@ -21,6 +21,7 @@ import com.example.pc.teachsomeafterschool.Model.WeekDay;
 import com.example.pc.teachsomeafterschool.Model.WeekSchedule;
 import com.example.pc.teachsomeafterschool.R;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.ViewById;
 
@@ -37,7 +38,7 @@ public class ClassInfoActivity extends Activity {
     @ViewById
     EditText edtTuition;
     @ViewById
-    TextView tvMonday, tvTuesday, tvWednesday, tvThursday, tvFriday, tvSaturday, tvSunday,tvChosenDay, tvPreChosenDay;
+    TextView tvMonday, tvTuesday, tvWednesday, tvThursday, tvFriday, tvSaturday, tvSunday;
     @ViewById
     TimePicker tpTimePicker;
     @ViewById
@@ -58,22 +59,40 @@ public class ClassInfoActivity extends Activity {
 //
 
     ArrayList<WeekDay> weekDays;
-    String weekTime;
     WeekSchedule weekSchedule;
     ClassModel classModel;
     WeekDay chosenDay, preChosenDay;
     boolean isStartFinish, isStopFinish;
-    private boolean dataOk;
+
+    public boolean isStartFinish() {
+        return isStartFinish;
+    }
+
+    public void setIsStartFinish(boolean isStartFinish) {
+        this.isStartFinish = isStartFinish;
+    }
+
+    public boolean isStopFinish() {
+        return isStopFinish;
+    }
+
+    public void setIsStopFinish(boolean isStopFinish) {
+        this.isStopFinish = isStopFinish;
+    }
+
+    boolean dataOk;
+    TextView tvChosenDay, tvPreChosenDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        init();
 
     }
-
-    private void init() {
+    @AfterViews
+    void init() {
+        classModel = new ClassModel();
         weekDays = new ArrayList<WeekDay>();
+        preChosenDay = new WeekDay();
     }
 
     @Click({R.id.tvMonday, R.id.tvTuesday, R.id.tvWednesday, R.id.tvThursday, R.id.tvFriday, R.id.tvSaturday, R.id.tvSunday})
@@ -87,7 +106,11 @@ public class ClassInfoActivity extends Activity {
         chosenDay = new WeekDay();
         if (tvStartTime.getVisibility() == View.INVISIBLE) {
             tvStartTime.setVisibility(View.VISIBLE);
+        }
+        if(tvStopTime.getVisibility()==View.INVISIBLE){
             tvStopTime.setVisibility(View.VISIBLE);
+        }
+        if(tpTimePicker.getVisibility()==View.INVISIBLE){
             tpTimePicker.setVisibility(View.VISIBLE);
         }
         switch (view.getId()) {
@@ -120,35 +143,62 @@ public class ClassInfoActivity extends Activity {
                 tvChosenDay = tvSunday;
                 break;
         }
-        if(!isDayExisted(chosenDay, weekDays)){
+        if (!isDayExisted1(chosenDay, weekDays)) {
+            setTvStartTimeColor();
             tvStartTime.setText(R.string.start);
             tvStopTime.setText(R.string.stop);
-            if(tvPreChosenDay != tvChosenDay){
+            if (tvPreChosenDay != tvChosenDay) {
                 tvChosenDay.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_chosen));
-                tvPreChosenDay.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_nomal));
+                if (!isDayExisted1(preChosenDay, weekDays) && tvPreChosenDay != null) {
+                    tvPreChosenDay.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_nomal));
+                }else if(tvPreChosenDay != null){
+                    tvPreChosenDay.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_scheduled));
+                }
+                tvPreChosenDay = tvChosenDay;
+                preChosenDay = chosenDay;
             }
-        }
-        else{
+            setIsStartFinish(false);
+            setIsStopFinish(false);
+
+        } else {
+            chosenDay.setStartTime(getStartChosenDay(chosenDay, weekDays));
+            chosenDay.setStopTime(getStopChosenDay(chosenDay, weekDays));
             tvStartTime.setText(getStartChosenDay(chosenDay, weekDays));
-            tvStartTime.setText(getStopChosenDay(chosenDay,weekDays));
+            tvStopTime.setText(getStopChosenDay(chosenDay, weekDays));
+            if (tvPreChosenDay != tvChosenDay) {
+                tvChosenDay.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_chosen));
+                if (!isDayExisted1(preChosenDay, weekDays) && tvPreChosenDay != null) {
+                    tvPreChosenDay.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_nomal));
+                }else if(tvPreChosenDay != null){
+                    tvPreChosenDay.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_scheduled));
+                }
+                tvPreChosenDay = tvChosenDay;
+                preChosenDay = chosenDay;
+            }
         }
 
     }
 
+    private void setStartStopTimeTrigger(boolean isStartFinish, boolean isStopFinish) {
+        this.isStartFinish = isStartFinish;
+        this.isStopFinish = isStopFinish;
+    }
+
     private String getStartChosenDay(WeekDay chosenDay, ArrayList<WeekDay> weekDays) {
-        if(weekDays.size()!=0){
-            for(WeekDay day: weekDays){
-                if(day.getDay().equals(chosenDay.getDay())){
+        if (weekDays.size() != 0) {
+            for (WeekDay day : weekDays) {
+                if (day.getDay().equals(chosenDay.getDay())) {
                     return day.getStartTime();
                 }
             }
         }
         return null;
     }
+
     private String getStopChosenDay(WeekDay chosenDay, ArrayList<WeekDay> weekDays) {
-        if(weekDays.size()!=0){
-            for(WeekDay day: weekDays){
-                if(day.getDay().equals(chosenDay.getDay())){
+        if (weekDays.size() != 0) {
+            for (WeekDay day : weekDays) {
+                if (day.getDay().equals(chosenDay.getDay())) {
                     return day.getStopTime();
                 }
             }
@@ -158,7 +208,8 @@ public class ClassInfoActivity extends Activity {
 
     @Click(R.id.tvStartTime)
     void AddNewStartTime() {
-        isStartFinish = false;
+        setTvStartTimeColor();
+        setIsStartFinish(false);
         tvStartTime.setText(getApplicationContext().getResources().getString(R.string.start));
         if (tpTimePicker.getVisibility() == View.INVISIBLE) {
             tpTimePicker.setVisibility(View.VISIBLE);
@@ -167,10 +218,14 @@ public class ClassInfoActivity extends Activity {
 
     @Click(R.id.tvStopTime)
     void AddNewStopTime() {
-        tvStopTime.setText(getApplicationContext().getResources().getString(R.string.stop));
-        isStopFinish = false;
-        if (tpTimePicker.getVisibility() == View.INVISIBLE) {
-            tpTimePicker.setVisibility(View.VISIBLE);
+        if(isStartFinish()) {
+            setTvStopTimeColor();
+            setIsStopFinish(false);
+            tvStopTime.setText(getApplicationContext().getResources().getString(R.string.stop));
+
+            if (tpTimePicker.getVisibility() == View.INVISIBLE) {
+                tpTimePicker.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -179,19 +234,26 @@ public class ClassInfoActivity extends Activity {
         if (!isStartFinish) {
             int hour = tpTimePicker.getCurrentHour();
             int minute = tpTimePicker.getCurrentMinute();
-            String time = Integer.toString(hour) + "-" + Integer.toString(minute);
+            String hourStr = hour<10? "0"+Integer.toString(hour):Integer.toString(hour);
+            String minuteStr = minute<10? "0"+Integer.toString(minute):Integer.toString(minute);
+            String time =  hourStr+ ":" +minuteStr ;
             tvStartTime.setText(time);
-            isStartFinish = true;
+            setIsStartFinish(true);
+            chosenDay.setStartTime(time);
+            if(!isStopFinish()){
+                setTvStopTimeColor();
+            }
         } else if (!isStopFinish) {
             int hour = tpTimePicker.getCurrentHour();
             int minute = tpTimePicker.getCurrentMinute();
             String time = Integer.toString(hour) + ":" + Integer.toString(minute);
             tvStopTime.setText(time);
-            isStopFinish = true;
-
+            setIsStopFinish(true);
+            chosenDay.setStopTime(time);
         }
-        if(isStartFinish&&isStopFinish){
-            if (!isDayExisted(chosenDay, weekDays)) {
+        if (isStartFinish() && isStopFinish()) {
+            setTvStartStopTimeColor();
+            if (!isDayExisted1(chosenDay, weekDays)) {
                 Add(chosenDay, weekDays);
             } else {
                 Edit(chosenDay, weekDays);
@@ -223,35 +285,32 @@ public class ClassInfoActivity extends Activity {
             return false;
         }
     }
+
     private boolean isDayExisted1(WeekDay chosenDay, ArrayList<WeekDay> weekDays) {
-        if(weekDays.size()!=0) {
+        if (weekDays.size() != 0) {
             for (WeekDay day : weekDays) {
                 if (day.getDay().equals(chosenDay.getDay())) {
                     return true;
-                } else {
-                    return false;
                 }
             }
-        }else{
-            return false;
         }
         return false;
     }
-    
+
     @Click({R.id.imgBack, R.id.imgOk})
-    public void clickOnActionBar(View v){
-        switch (v.getId()){
+    public void clickOnActionBar(View v) {
+        switch (v.getId()) {
             case R.id.imgBack:
                 onBackPressed();
 
                 break;
             case R.id.imgOk:
-                if(isDataOk()){
+                if (isDataOk()) {
                     SaveData();
-                }else{
-                    
+                } else {
+
                 }
-                
+
                 break;
         }
     }
@@ -263,107 +322,39 @@ public class ClassInfoActivity extends Activity {
     }
 
     private void SaveData() {
-        
+        getData();
     }
 
+    public void getData() {
+        String className = spGradeSelector.getSelectedItem().toString();
+        classModel.setName(className);
+        classModel.setTuition(Integer.valueOf(edtTuition.getText().toString()));
+        weekSchedule.setWeekTime(getWeekTime(weekDays));
+    }
+
+    private String getWeekTime(ArrayList<WeekDay> weekDays) {
+        String result  = "";
+        for(WeekDay day : weekDays){
+            result = day.getDay()+"-"+day.getStartTime()+"-"+day.getStopTime()+"_";
+        }
+        return result;
+    }
 
     public boolean isDataOk() {
-        boolean dataOk=false;
+        boolean dataOk = true;
         return dataOk;
     }
-//    private void MarkScheduleDays(ArrayList<WeekDay> weekDays) {
-//        if(weekDays.size()==0){
-////            tvMonday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
-////            tvTuesday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
-////            tvWednesday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
-////            tvThursday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
-////            tvFriday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
-////            tvSaturday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
-////            tvSunday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
-//            tvMonday.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_nomal));
-//            tvTuesday.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_nomal));
-//            tvWednesday.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_nomal));
-//            tvThursday.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_nomal));
-//            tvFriday.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_nomal));
-//            tvSaturday.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_nomal));
-//            tvSunday.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_nomal));
-//            return;
-//        }
-//        for (int i = 2; i <= 8; i++) {
-//            switch(i){
-//
-//                case Const.MONDAY:
-//                    for (WeekDay day : weekDays) {
-//                        if (day.getDay().equals(Integer.toString(i))) {
-//                            tvMonday.setBackgroundColor(Color.GRAY);
-//                        }
-//                        else{
-//                            tvMonday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
-//                        }
-//                    }
-//                    break;
-//                case Const.TUESDAY:
-//                    for (WeekDay day : weekDays) {
-//                        if (day.getDay().equals(Integer.toString(i))) {
-//                            tvTuesday.setBackgroundColor(Color.GRAY);
-//                        }
-//                        else{
-//                            tvTuesday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
-//                        }
-//                    }
-//                    break;
-//                case Const.WEDNESDAY:
-//                    for (WeekDay day : weekDays) {
-//                        if (day.getDay().equals(Integer.toString(i))) {
-//                            tvWednesday.setBackgroundColor(Color.GRAY);
-//                        }
-//                        else{
-//                            tvWednesday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
-//                        }
-//                    }
-//                    break;
-//                case Const.THURSDAY:
-//                    for (WeekDay day : weekDays) {
-//                        if (day.getDay().equals(Integer.toString(i))) {
-//                            tvThursday.setBackgroundColor(Color.GRAY);
-//                        }
-//                        else{
-//                            tvThursday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
-//                        }
-//                    }
-//                    break;
-//                case Const.FRIDAY:
-//                    for (WeekDay day : weekDays) {
-//                        if (day.getDay().equals(Integer.toString(i))) {
-//                            tvFriday.setBackgroundColor(Color.GRAY);
-//                        }
-//                        else{
-//                            tvFriday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
-//                        }
-//                    }
-//                    break;
-//                case Const.SATURDAY:
-//                    for (WeekDay day : weekDays) {
-//                        if (day.getDay().equals(Integer.toString(i))) {
-//                            tvSaturday.setBackgroundColor(Color.GRAY);
-//                        }
-//                        else{
-//                            tvSaturday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
-//                        }
-//                    }
-//                    break;
-//                case Const.SUNDAY:
-//                    for (WeekDay day : weekDays) {
-//                        if (day.getDay().equals(Integer.toString(i))) {
-//                            tvSunday.setBackgroundColor(Color.GRAY);
-//                        }
-//                        else{
-//                            tvSunday.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.lightgrey));
-//                        }
-//                    }
-//                    break;
-//            }
-//        }
-//    }
 
+    private void setTvStartTimeColor(){
+        tvStartTime.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_chosen));
+        tvStopTime.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.dayly_time_rounded_button_nomal));
+    }
+    private void setTvStopTimeColor(){
+        tvStopTime.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.weekly_rounded_button_chosen));
+        tvStartTime.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.dayly_time_rounded_button_nomal));
+    }
+    private void setTvStartStopTimeColor(){
+        tvStopTime.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.dayly_time_rounded_button_nomal));
+        tvStartTime.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.dayly_time_rounded_button_nomal));
+    }
 }

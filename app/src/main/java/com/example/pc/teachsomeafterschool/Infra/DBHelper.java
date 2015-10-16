@@ -191,8 +191,8 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, instant.getName());
-        values.put(KEY_STARTING_TIME, getDateTime());
-        values.put(KEY_IS_FINISH, instant.isFinish());
+        values.put(KEY_STARTING_TIME, Util.getDateTime());
+        values.put(KEY_IS_FINISH, false);
         values.put(KEY_TUITION, instant.getTuition());
         // insert row
         long todo_id = db.insert(TABLE_CLASS, null, values);
@@ -332,12 +332,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return student_tuition_id;
     }
 
-    private String getDateTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "dd-MM-yyyy", Locale.getDefault());
-        Date date = new Date();
-        return dateFormat.format(date);
-    }
+
 
 
     public long createWeekSchedule(WeekSchedule weekSchedule) {
