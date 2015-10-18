@@ -8,11 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.pc.teachsomeafterschool.Infra.Const;
+import com.example.pc.teachsomeafterschool.Model.ClassModel;
 import com.example.pc.teachsomeafterschool.Model.Student;
+import com.example.pc.teachsomeafterschool.Model.Tuition;
 import com.example.pc.teachsomeafterschool.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by pc on 10/5/2015.
@@ -21,12 +23,14 @@ public class StudentListAdapter extends ArrayAdapter<Student> {
     Context context;
     int resource;
     ArrayList<Student> objects;
-
-    public StudentListAdapter(Context context, int resource, ArrayList<Student> objects) {
+    ClassModel classModel;
+    ArrayList<Tuition> tuis;
+    public StudentListAdapter(Context context, int resource, ArrayList<Student> objects, ClassModel classModel) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
         this.objects = objects;
+        this.classModel = classModel;
     }
 
     @Override
@@ -46,12 +50,39 @@ public class StudentListAdapter extends ArrayAdapter<Student> {
         else{
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.tvstudent_name.setText(objects.get(position).getFull_name());
+        holder.tvstudent_name.setText(objects.get(position).getFullName());
+        holder.tvphone.setText(objects.get(position).getPhone());
+        holder.tvreal_class_name.setText(objects.get(position).getOfficialClass());
+//        tuis= calculateMonthlyPaymentToTuitionArray(Integer.toString(classModel.getTuition()));
+//        holder.tvmonth_in_debt.setText(Integer.toString(Util.calculateTotalDebt(tuis, classModel.getStartingTime(), Util.getCurrentMonth())));
         return convertView;
+    }
+    public ArrayList<Tuition> calculateMonthlyPaymentToTuitionArray(String monthlyPayment, String startingMonth, String currentMonth) {
+        ArrayList<Tuition> result = new ArrayList<Tuition>();
+        Tuition tui;
+        String s;
+        String[] monthlyPaymentStr = monthlyPayment.split("_");
+        int intStartingMonth = Integer.valueOf(startingMonth);
+        int intCurrentMonth = Integer.valueOf(currentMonth);
+        for (int i =  0; i < 12; i++) {
+            tui = new Tuition();
+            s = monthlyPaymentStr[i];
+            tui.setMonth(s.split(":")[0]);
+
+            if ((Integer.valueOf(s.split(":")[1]) == -1)&& (intStartingMonth-2<i)) {
+                tui.setIsPay(Const.NO);
+            } else {
+                tui.setIsPay(Integer.valueOf(s.split(":")[1]));
+            }
+            result.add(tui);
+        }
+        return result;
     }
 
     class ViewHolder {
         ImageView imgavatar;
         TextView tvstudent_name, tvreal_class_name, tvmonth_in_debt, tvphone;
     }
+
+
 }

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.pc.teachsomeafterschool.Model.ClassModel;
+import com.example.pc.teachsomeafterschool.Model.ClassStudent;
 import com.example.pc.teachsomeafterschool.Model.Student;
 
 import java.lang.reflect.Array;
@@ -26,7 +27,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database Name
     private static final String DATABASE_NAME = "TeachSomeAfterSchool";
@@ -35,8 +36,6 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TABLE_STUDENT = "students";
     private static final String TABLE_CLASS = "classes";
     private static final String TABLE_CLASS_STUDENT = "class_students";
-    private static final String TABLE_TUITION = "tuitions";
-    private static final String TABLE_STUDENT_TUITION = "student_tuitions";
 
     // Common column names
     private static final String KEY_ID = "id";
@@ -46,7 +45,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_NAME = "name";
     private static final String KEY_STARTING_TIME = "startingTime";
     private static final String KEY_IS_FINISH = "isFinish";
-    private static final String KEY_TUITION = "tuition";
+    private static final String KEY_TUITION = "Tuition";
     private static final String KEY_WEEK_TIME = "week_time";
 
     // STUDENTS Table - column names
@@ -57,26 +56,14 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_ADDRESS = "address";
     private static final String KEY_SEX = "sex";
     private static final String KEY_AVATAR = "image_url";
+    private static final String KEY_MONTHLY_PAYMENT="monthly_payment";
 
-    // TUITIONS Table - column names
-    private static final String KEY_JAN = "jan";
-    private static final String KEY_FEB = "feb";
-    private static final String KEY_MAR = "mar";
-    private static final String KEY_APR = "apr";
-    private static final String KEY_MAY = "may";
-    private static final String KEY_JUN = "jun";
-    private static final String KEY_JUL = "jul";
-    private static final String KEY_AUG = "aug";
-    private static final String KEY_SEP = "sep";
-    private static final String KEY_OCT = "oct";
-    private static final String KEY_NOV = "nov";
-    private static final String KEY_DEC = "dec";
 
     // CLASS_STUDENTS table - column names
     private static final String KEY_CLASS_ID = "class_id";
 
-    // STUDENT_TUITION table - column names
-    private static final String KEY_TUITION_ID = "tuition_id";
+//    // STUDENT_TUITION table - column names
+//    private static final String KEY_TUITION_ID = "tuition_id";
 
 
     // Table Create Statements
@@ -93,41 +80,20 @@ public class DBHelper extends SQLiteOpenHelper {
             + KEY_SEX
             + " INTEGER,"
             + KEY_AVATAR + " TEXT,"
-            + KEY_STARTING_TIME + " TEXT" + ")";
+            + KEY_STARTING_TIME + " TEXT,"
+            +  KEY_MONTHLY_PAYMENT + " TEXT" +
+
+            ")";
 
     // CLASS table create statement
     private static final String CREATE_TABLE_CLASS = "CREATE TABLE " + TABLE_CLASS
             + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
             + KEY_STARTING_TIME + " TEXT," + KEY_IS_FINISH + " INTEGER," + KEY_TUITION + " INTEGER," + KEY_WEEK_TIME + " TEXT"+")";
 
-    // TUITION table create statement
-    private static final String CREATE_TABLE_TUITION = "CREATE TABLE " + TABLE_TUITION
-            + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_JAN + " INTEGER,"
-            + KEY_FEB + " INTEGER,"
-            + KEY_MAR + " INTEGER,"
-            + KEY_APR + " INTEGER,"
-            + KEY_MAY + " INTEGER,"
-            + KEY_JUN + " INTEGER,"
-            + KEY_JUL + " INTEGER,"
-            + KEY_AUG + " INTEGER,"
-            + KEY_SEP + " INTEGER,"
-            + KEY_OCT + " INTEGER,"
-            + KEY_NOV + " INTEGER,"
-            + KEY_DEC + " INTEGER"
-            + ")";
-
     // CLASS_STUDENT table create statement
     private static final String CREATE_TABLE_CLASS_STUDENT = "CREATE TABLE "
             + TABLE_CLASS_STUDENT + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_CLASS_ID + " INTEGER," + KEY_STUDENT_ID + " INTEGER"
-            + ")";
-
-
-    // STUDENT_TUITION table create statement
-    private static final String CREATE_TABLE_STUDENT_TUITION = "CREATE TABLE "
-            + TABLE_STUDENT_TUITION + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_STUDENT_ID + " INTEGER," + KEY_TUITION_ID + " INTEGER"
             + ")";
 
     public DBHelper(Context context) {
@@ -140,12 +106,8 @@ public class DBHelper extends SQLiteOpenHelper {
         // creating required tables
 
         db.execSQL(CREATE_TABLE_CLASS);
-        db.execSQL(CREATE_TABLE_TUITION);
         db.execSQL(CREATE_TABLE_CLASS_STUDENT);
         db.execSQL(CREATE_TABLE_STUDENT);
-        db.execSQL(CREATE_TABLE_STUDENT_TUITION);
-//        db.execSQL(CREATE_TABLE_WEEK_SCHEDULE);
-//        db.execSQL(CREATE_TABLE_CLASS_WEEK_SCHEDULE);
 
     }
 
@@ -155,10 +117,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASS_STUDENT);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TUITION);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_STUDENT_TUITION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STUDENT);
-        // create new tables
         onCreate(db);
     }
 
@@ -256,53 +215,59 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_FULL_NAME, student.getFull_name());
-        values.put(KEY_OFFICIAL_CLASS, student.getOfficial_class());
+        values.put(KEY_FULL_NAME, student.getFullName());
+        values.put(KEY_OFFICIAL_CLASS, student.getOfficialClass());
         values.put(KEY_SCHOOL, student.getSchool());
         values.put(KEY_PHONE, student.getPhone());
         values.put(KEY_ADDRESS, student.getAdd());
         values.put(KEY_SEX, student.getSex());
-        values.put(KEY_AVATAR, student.getImage_url());
+        values.put(KEY_AVATAR, student.getImageUrl());
+        values.put(KEY_MONTHLY_PAYMENT, student.getMonthlyPayment());
+
+
         // insert row
         long student_id = db.insert(TABLE_STUDENT, null, values);
         return student_id;
     }
 
+    public ArrayList<Student> getStudents(int classId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Student> result = new ArrayList<Student>();
+        ArrayList<ClassStudent> classStudentList = new ArrayList<ClassStudent>();
+        classStudentList = getClassStudentByClassId(classId);
+        for(ClassStudent clSt: classStudentList){
+            result.add(getStudent(clSt.getStudentId()));
+        }
+        return result;
+    }
     public ArrayList<Student> getAllStudents(int classId){
         ArrayList<Student> result = new ArrayList<Student>();
         return result;
     }
+    public Student getStudent(int studentId) {
+        SQLiteDatabase db = this.getReadableDatabase();
 
+        String selectQuery = "SELECT  * FROM " + TABLE_STUDENT + " WHERE "
+                + KEY_ID + " = " + studentId;
+        Cursor c = db.rawQuery(selectQuery, null);
 
+        if (c != null)
+            c.moveToFirst();
 
-    /*
-     * Creating a tuition
-     */
+        Student cl = new Student();
+        cl.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+        cl.setFullNname((c.getString(c.getColumnIndex(KEY_FULL_NAME))));
+        cl.setOfficialClass(c.getString(c.getColumnIndex(KEY_OFFICIAL_CLASS)));
+        cl.setSchool(c.getString(c.getColumnIndex(KEY_SCHOOL)));
+        cl.setImageUrl(c.getString(c.getColumnIndex(KEY_AVATAR)));
 
-    public long createTuition(com.example.pc.teachsomeafterschool.Model.Tuition tuition) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        cl.setPhone((c.getString(c.getColumnIndex(KEY_PHONE))));
+        cl.setAdd(c.getString(c.getColumnIndex(KEY_ADDRESS)));
+        cl.setSex(c.getInt(c.getColumnIndex(KEY_SEX)));
+        cl.setMonthlyPayment(c.getString(c.getColumnIndex(KEY_MONTHLY_PAYMENT)));
 
-        ContentValues values = new ContentValues();
-        values.put(KEY_JAN, tuition.isJan());
-        values.put(KEY_FEB, tuition.isFeb());
-        values.put(KEY_MAR, tuition.isMar());
-        values.put(KEY_APR, tuition.isApr());
-        values.put(KEY_MAY, tuition.isMay());
-        values.put(KEY_JUN, tuition.isJun());
-        values.put(KEY_JUL, tuition.isJul());
-        values.put(KEY_AUG, tuition.isAug());
-        values.put(KEY_SEP, tuition.isSep());
-        values.put(KEY_OCT, tuition.isOct());
-        values.put(KEY_NOV, tuition.isNov());
-        values.put(KEY_DEC, tuition.isDec());
-
-        // insert row
-        long tuition_id = db.insert(TABLE_STUDENT, null, values);
-        return tuition_id;
+        return cl;
     }
-    /*
-     * Creating a class_student
-     */
 
     public long createClass_Student(int classID, int studentID) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -316,18 +281,24 @@ public class DBHelper extends SQLiteOpenHelper {
         return class_student_id;
     }
 
-    /*
-     * Creating a student_tuition
-     */
-    public long createStudent_Tuition(int studentID, int tuitionID) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public ArrayList<ClassStudent> getClassStudentByClassId(int classId){
+        ArrayList<ClassStudent> result = new ArrayList<ClassStudent>();
+        String selectQuery = "SELECT  * FROM " + TABLE_CLASS_STUDENT+ " where " + KEY_CLASS_ID + " ="+classId+" ORDER BY "+KEY_ID+" DESC";
 
-        ContentValues values = new ContentValues();
-        values.put(KEY_STUDENT_ID, studentID);
-        values.put(KEY_TUITION_ID, tuitionID);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c.moveToFirst()) {
+            do {
+                ClassStudent cl = new ClassStudent();
+                cl.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+                cl.setClassId((c.getInt(c.getColumnIndex(KEY_CLASS_ID))));
 
-        // insert row
-        long student_tuition_id = db.insert(TABLE_STUDENT_TUITION, null, values);
-        return student_tuition_id;
+                cl.setStudentId(c.getInt(c.getColumnIndex(KEY_STUDENT_ID)));
+
+                result.add(cl);
+            } while (c.moveToNext());
+        }
+        return result;
     }
+
 }

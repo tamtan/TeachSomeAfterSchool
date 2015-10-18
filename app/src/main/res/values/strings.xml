@@ -69,4 +69,8 @@
     <string name="miss_tuition">Bạn chưa nhập số tiền</string>
     <string name="miss_schedule">Bạn chưa chọn lịch học</string>
     <string name="null_chosen_day">Bạn chưa chọn thứ</string>
+    <string name="add_new_student">Thêm HS</string>
+    <string name="error_no_class_existed">Bạn chưa tạo lớp</string>
+    <string name="notification_success_creating_class">Bạn đã tạo lớp thành công</string>
+    <string name="tuition_detail">Thông tin học phí</string>
 </resources>

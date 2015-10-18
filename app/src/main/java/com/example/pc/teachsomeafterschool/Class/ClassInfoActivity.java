@@ -296,6 +296,10 @@ public class ClassInfoActivity extends Activity {
             case R.id.imgOk:
                 if (isDataOk()) {
                     long id = SaveData();
+                    if(id!= -1){
+                        Toast.makeText(ClassInfoActivity.this, getApplicationContext().getResources().getString(R.string.notification_success_creating_class),Toast.LENGTH_LONG).show();
+                        onBackPressed();
+                    }
                 } else {
 
                 }

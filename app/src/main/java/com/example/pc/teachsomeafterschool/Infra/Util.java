@@ -1,13 +1,8 @@
 package com.example.pc.teachsomeafterschool.Infra;
 
 import android.content.Context;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 
-import com.example.pc.teachsomeafterschool.Model.ClassModel;
+import com.example.pc.teachsomeafterschool.Model.Tuition;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,7 +29,40 @@ public class Util {
         Date date = new Date();
         return dateFormat.format(date);
     }
+    public static String getCurrentMonth(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "MM", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+    public static String getMonth(String time){
+       String[] timeArr = time.split("-");
+        return timeArr[1];
+    }
 
+    public int calculateTotalDebt(ArrayList<Tuition> tuis, String startingMonth, String currentMonth) {
+        int result = 0;
+        int intStartingMonth = Integer.valueOf(startingMonth);
+        int intCurrentMonth = Integer.valueOf(currentMonth);
+        if(intStartingMonth>intCurrentMonth){
+            for(int i = intStartingMonth; i<=12; i++){
+                if(tuis.get(i-1).getIsPay()== Const.NO){
+                    result+=1;
+                }
+            }
+            for(int i = 1; i<=intCurrentMonth; i++){
+                if(tuis.get(i-1).getIsPay()==Const.NO){
+                    result+=1;
+                }
+            }
 
-
+        }else{
+            for(int i = intStartingMonth; i<=intCurrentMonth; i++){
+                if(tuis.get(i-1).getIsPay()==Const.NO){
+                    result+=1;
+                }
+            }
+        }
+        return result;
+    }
 }

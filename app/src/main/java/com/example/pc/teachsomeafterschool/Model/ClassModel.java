@@ -1,32 +1,17 @@
 package com.example.pc.teachsomeafterschool.Model;
 
-import java.util.Date;
-
 /**
  * Created by pc on 10/2/2015.
  */
 public class ClassModel {
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     int id;
     String name;
     String startingTime;
     int isFinish;
     int tuition;
     String weekSchedule;
-    public String getWeekSchedule() {
-        return weekSchedule;
-    }
-    public void setWeekSchedule(String weekSchedule) {
-        this.weekSchedule = weekSchedule;
-    }
-    public ClassModel(String name, String startingTime, int isFinish, int tuition){
+
+    public ClassModel(String name, String startingTime, int isFinish, int tuition) {
         this.name = name;
         this.startingTime = startingTime;
         this.isFinish = isFinish;
@@ -36,11 +21,27 @@ public class ClassModel {
     public ClassModel() {
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getWeekSchedule() {
+        return weekSchedule;
+    }
+
+    public void setWeekSchedule(String weekSchedule) {
+        this.weekSchedule = weekSchedule;
+    }
+
     public int isFinish() {
         return isFinish;
     }
 
-    public long getTuition() {
+    public int getTuition() {
         return tuition;
     }
 
@@ -52,16 +53,19 @@ public class ClassModel {
         this.isFinish = isFinish;
     }
 
-    public void setName(String name){
-        this.name= name;
-    }
-    public String getName(){
+    public String getName() {
         return name;
     }
-    public void setStartingTime(String date){
-        this.startingTime = date;
+
+    public void setName(String name) {
+        this.name = name;
     }
-    public String getStartingTime(){
+
+    public String getStartingTime() {
         return startingTime;
+    }
+
+    public void setStartingTime(String date) {
+        this.startingTime = date;
     }
 }

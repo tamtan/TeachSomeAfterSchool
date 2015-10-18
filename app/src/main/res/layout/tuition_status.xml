@@ -113,6 +113,7 @@
                         android:text="@string/jan" />
 
                     <ImageView
+                        android:id="@+id/imgJan"
                         style="@style/imgChecbox"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -136,6 +137,7 @@
                         android:text="@string/feb" />
 
                     <ImageView
+                        android:id="@+id/imgFeb"
                         style="@style/imgChecbox"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -159,6 +161,7 @@
                         android:text="@string/mar" />
 
                     <ImageView
+                        android:id="@+id/imgMar"
                         style="@style/imgChecbox"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -196,6 +199,7 @@
                             android:text="@string/apr" />
 
                         <ImageView
+                            android:id="@+id/imgApr"
                             style="@style/imgChecbox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -219,6 +223,7 @@
                             android:text="@string/may" />
 
                         <ImageView
+                            android:id="@+id/imgMay"
                             style="@style/imgChecbox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -242,6 +247,7 @@
                             android:text="@string/jun" />
 
                         <ImageView
+                            android:id="@+id/imgJun"
                             style="@style/imgChecbox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -281,6 +287,7 @@
                             android:text="@string/jul" />
 
                         <ImageView
+                            android:id="@+id/imgJul"
                             style="@style/imgChecbox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -304,6 +311,7 @@
                             android:text="@string/aug" />
 
                         <ImageView
+                            android:id="@+id/imgAug"
                             style="@style/imgChecbox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -327,6 +335,7 @@
                             android:text="@string/sep" />
 
                         <ImageView
+                            android:id="@+id/imgSep"
                             style="@style/imgChecbox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -366,6 +375,7 @@
                             android:text="@string/oct" />
 
                         <ImageView
+                            android:id="@+id/imgOct"
                             style="@style/imgChecbox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -389,6 +399,7 @@
                             android:text="@string/nov" />
 
                         <ImageView
+                            android:id="@+id/imgNov"
                             style="@style/imgChecbox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -412,6 +423,7 @@
                             android:text="@string/dec" />
 
                         <ImageView
+                            android:id="@+id/imgDec"
                             style="@style/imgChecbox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -452,6 +464,8 @@
                     </TextView>
 
                     <TextView
+                        android:textStyle="bold"
+                        android:gravity="center_vertical"
                         android:id="@+id/tvTotal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -478,6 +492,8 @@
                     </TextView>
 
                     <TextView
+                        android:textStyle="bold"
+                        android:gravity="center_vertical"
                         android:id="@+id/tvInDebt"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

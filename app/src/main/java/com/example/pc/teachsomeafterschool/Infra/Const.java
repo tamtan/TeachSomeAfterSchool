@@ -14,5 +14,8 @@ public class Const {
     public static final int NOT_FINISTH = 0;
     public static final int FINISH =1;
     public static final int MALE =1;
-    public static final int FEMALE =1;
+    public static final int FEMALE =0;
+    public static final int YES = 1;
+    public static final int NO = 0;
+    public static final int DISABLE = -1;
 }

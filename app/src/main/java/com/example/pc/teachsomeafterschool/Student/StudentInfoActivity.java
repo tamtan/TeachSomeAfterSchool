@@ -23,7 +23,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pc.teachsomeafterschool.Infra.Const;
+import com.example.pc.teachsomeafterschool.Infra.DBHelper;
+import com.example.pc.teachsomeafterschool.Model.ClassStudent;
 import com.example.pc.teachsomeafterschool.Model.Student;
+import com.example.pc.teachsomeafterschool.Model.Tuition;
 import com.example.pc.teachsomeafterschool.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -38,6 +41,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by TAM on 06-Oct-15.
@@ -45,7 +49,6 @@ import java.io.IOException;
 @EActivity(R.layout.student_info)
 public class StudentInfoActivity extends Activity {
     private static final int REQUEST_LOAD_IMAGE = 1;
-    private static final int REQUEST_IMAGE_CAPTURE = 2;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 3;
     @ViewById
     EditText edtStudent_class, edtStudent_full_name, edtStudent_phone_number, edtStudent_real_class, edtStudent_school, edtStudent_address;
@@ -55,13 +58,18 @@ public class StudentInfoActivity extends Activity {
     TextView tvAvatar, tvTitle;
     @ViewById
     ImageView imgBack, imgOk, imgAvatar;
-
+    ArrayList<Tuition> monthlyPaymentArray;
     Student studentModel;
-    String avatarURL;
+    ClassStudent classStudent;
+//    ClassModel classModel;
+    String jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec, startingTime;
+    Tuition tui;
     ImageRecommendDialog imageDig;
     Uri imageUri = null;
     DisplayImageOptions options;
     private ImageLoader imageLoader;
+    DBHelper db;
+    int classId;
 
     public static String convertImageUriToFile(Uri imageUri, Activity activity) {
         Cursor cursor = null;
@@ -136,16 +144,7 @@ public class StudentInfoActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
-//        imageLoader.getInstance().init(config);
-//        options = new DisplayImageOptions.Builder()
-//                .showImageOnLoading(R.drawable.avatar) // resource or drawable
-//                .showImageForEmptyUri(R.drawable.avatar) // resource or drawable
-//                .showImageOnFail(R.drawable.avatar)
-//                .considerExifParams(true)
-//                .bitmapConfig(Bitmap.Config.ARGB_8888)
-//                .cacheInMemory(false)
-//                .build();
+
         imageLoader = ImageLoader.getInstance();
 
         imageLoader.init(ImageLoaderConfiguration
@@ -160,10 +159,52 @@ public class StudentInfoActivity extends Activity {
     @AfterViews
     public void init(){
 
+        monthlyPaymentArray = new ArrayList<Tuition>();
+        jan = getApplicationContext().getResources().getString(R.string.jan);
+        tui = new Tuition(jan,Const.DISABLE);
+        monthlyPaymentArray.add(tui);
+        feb = getApplicationContext().getResources().getString(R.string.feb);
+        tui = new Tuition(feb,Const.DISABLE);
+        monthlyPaymentArray.add(tui);
+        mar = getApplicationContext().getResources().getString(R.string.mar);
+        tui = new Tuition(mar,Const.DISABLE);
+        monthlyPaymentArray.add(tui);
+        apr = getApplicationContext().getResources().getString(R.string.apr);
+        tui = new Tuition(apr,Const.DISABLE);
+        monthlyPaymentArray.add(tui);
+        may = getApplicationContext().getResources().getString(R.string.may);
+        tui = new Tuition(may,Const.DISABLE);
+        monthlyPaymentArray.add(tui);
+        jun = getApplicationContext().getResources().getString(R.string.jun);
+        tui = new Tuition(jun,Const.DISABLE);
+        monthlyPaymentArray.add(tui);
+        jul = getApplicationContext().getResources().getString(R.string.jul);
+        tui = new Tuition(jul,Const.DISABLE);
+        monthlyPaymentArray.add(tui);
+        aug = getApplicationContext().getResources().getString(R.string.aug);
+        tui = new Tuition(aug,Const.DISABLE);
+        monthlyPaymentArray.add(tui);
+        sep = getApplicationContext().getResources().getString(R.string.sep);
+        tui = new Tuition(sep,Const.DISABLE);
+        monthlyPaymentArray.add(tui);
+        oct = getApplicationContext().getResources().getString(R.string.oct);
+        tui = new Tuition(oct,Const.DISABLE);
+        monthlyPaymentArray.add(tui);
+        nov = getApplicationContext().getResources().getString(R.string.nov);
+        tui = new Tuition(nov,Const.DISABLE);
+        monthlyPaymentArray.add(tui);
+        dec = getApplicationContext().getResources().getString(R.string.dec);
+        tui = new Tuition(dec,Const.DISABLE);
+        monthlyPaymentArray.add(tui);
+
+        edtStudent_class.setText(getIntent().getExtras().getString("className"));
+//        classModel = getIntent().getParcelableExtra("classModel");
+        classId = getIntent().getExtras().getInt("classId");
         studentModel = new Student();
         cbMale.setChecked(true);
         imageDig = new ImageRecommendDialog(this);
         tvTitle.setText(getResources().getString(R.string.student_infor_title));
+        db= new DBHelper(this);
     }
     @Override
     protected void onResume() {
@@ -240,14 +281,30 @@ public class StudentInfoActivity extends Activity {
     }
 
     private void SaveData() {
-        studentModel.setFull_name(edtStudent_full_name.getText().toString());
+        studentModel.setFullNname(edtStudent_full_name.getText().toString());
         studentModel.setAdd(edtStudent_address.getText().toString());
-        studentModel.setOfficial_class(edtStudent_real_class.getText().toString());
+        studentModel.setOfficialClass(edtStudent_real_class.getText().toString());
         studentModel.setPhone(edtStudent_phone_number.getText().toString());
         studentModel.setSchool(edtStudent_school.getText().toString());
-
+        studentModel.setMonthlyPayment(convertToMonthlyPayment(monthlyPaymentArray));
+        studentModel.setId((int) db.createStudent(studentModel));
+        classStudent = new ClassStudent();
+        classStudent.setClassId(classId);
+        classStudent.setStudentId(studentModel.getId());
+        long classStudentId = db.createClass_Student(classId,studentModel.getId());
+        if(classStudentId != -1){
+            onBackPressed();
+        }
     }
 
+    public String convertToMonthlyPayment(ArrayList<Tuition> monthlyPaymentArray )
+    {
+        String result = "";
+        for(Tuition tui: monthlyPaymentArray){
+            result+=tui.getMonth()+":"+Integer.toString(tui.getIsPay())+"_";
+        }
+        return result;
+    }
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             Uri imageUri = data.getData();
@@ -293,7 +350,7 @@ public class StudentInfoActivity extends Activity {
 
                         }
                     });
-            studentModel.setImage_url(picturePath);
+            studentModel.setImageUrl(picturePath);
         }
 
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
@@ -345,7 +402,7 @@ public class StudentInfoActivity extends Activity {
 
                         }
                     });
-            studentModel.setImage_url(picturePath);
+            studentModel.setImageUrl(picturePath);
 
         } else if (resultCode == RESULT_CANCELED) {
 

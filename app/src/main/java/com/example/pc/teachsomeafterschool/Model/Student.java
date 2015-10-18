@@ -5,76 +5,84 @@ package com.example.pc.teachsomeafterschool.Model;
  */
 public class Student {
     int id;
-    String full_name;
-    String official_class;
+    String fullName;
+    String officialClass;
     String school;
     String phone;
     String add;
     int sex;
-    String image_url;
+    String imageUrl;
+    String monthlyPayment;
 
-    public void setId(int id) {
-        this.id = id;
+    public String getMonthlyPayment() {
+        return monthlyPayment;
     }
 
-    public void setFull_name(String full_name) {
-        this.full_name = full_name;
+    public void setMonthlyPayment(String monthlyPayment) {
+        this.monthlyPayment = monthlyPayment;
     }
 
-    public void setOfficial_class(String official_class) {
-        this.official_class = official_class;
+    public void setFullNname(String fullName) {
+        this.fullName = fullName;
     }
-
-    public void setSchool(String school) {
-        this.school = school;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public void setAdd(String add) {
-        this.add = add;
-    }
-
-    public void setSex(int sex) {
-        this.sex = sex;
-    }
-
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
-    }
-
 
     public int getId() {
         return id;
     }
 
-    public String getFull_name() {
-        return full_name;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getOfficial_class() {
-        return official_class;
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getOfficialClass() {
+        return officialClass;
+    }
+
+    public void setOfficialClass(String officialClass) {
+        this.officialClass = officialClass;
     }
 
     public String getSchool() {
         return school;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getPhone() {
         return phone;
     }
 
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getAdd() {
         return add;
     }
 
+    public void setAdd(String add) {
+        this.add = add;
+    }
+
     public int getSex() {
         return sex;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
     }
 }

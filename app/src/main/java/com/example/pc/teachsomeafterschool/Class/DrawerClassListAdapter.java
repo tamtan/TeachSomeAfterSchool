@@ -33,22 +33,23 @@ public class DrawerClassListAdapter extends ArrayAdapter<ClassModel> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if(convertView == null){
+        View row = convertView;
+        if(row == null){
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(layout, null);
-            holder.tvclass_name = (TextView) convertView.findViewById(R.id.tvclass_name);
-            holder.tvmonday = (TextView) convertView.findViewById(R.id.tvmonday);
-            holder.tvtuesday = (TextView) convertView.findViewById(R.id.tvtuesday);
-            holder.tvwednesday = (TextView) convertView.findViewById(R.id.tvwednesday);
-            holder.tvthusday = (TextView) convertView.findViewById(R.id.tvthusday);
-            holder.tvfriday = (TextView) convertView.findViewById(R.id.tvfriday);
-            holder.tvsaturday = (TextView) convertView.findViewById(R.id.tvsaturday);
-            holder.tvsunday = (TextView) convertView.findViewById(R.id.tvsunday);
-            convertView.setTag(holder);
+            row = inflater.inflate(layout, null);
+            holder.tvclass_name = (TextView) row.findViewById(R.id.tvclass_name);
+            holder.tvmonday = (TextView) row.findViewById(R.id.tvmonday);
+            holder.tvtuesday = (TextView) row.findViewById(R.id.tvtuesday);
+            holder.tvwednesday = (TextView) row.findViewById(R.id.tvwednesday);
+            holder.tvthusday = (TextView) row.findViewById(R.id.tvthusday);
+            holder.tvfriday = (TextView) row.findViewById(R.id.tvfriday);
+            holder.tvsaturday = (TextView) row.findViewById(R.id.tvsaturday);
+            holder.tvsunday = (TextView) row.findViewById(R.id.tvsunday);
+            row.setTag(holder);
         }
         else{
-            holder = (ViewHolder) convertView.getTag();
+            holder = (ViewHolder) row.getTag();
         }
         holder.tvclass_name.setText(classList.get(position).getName());
         weekDays = new ArrayList<WeekDay>();
@@ -79,7 +80,7 @@ public class DrawerClassListAdapter extends ArrayAdapter<ClassModel> {
                     break;
             }
         }
-        return convertView;
+        return row;
     }
 
     private ArrayList<WeekDay> getWeekSchedule(ClassModel classModel) {

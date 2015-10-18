@@ -3,6 +3,7 @@ package com.example.pc.teachsomeafterschool;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,12 +19,15 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.pc.teachsomeafterschool.Class.ClassInfoActivity_;
 import com.example.pc.teachsomeafterschool.Class.DrawerClassListAdapter;
 import com.example.pc.teachsomeafterschool.Infra.DBHelper;
 import com.example.pc.teachsomeafterschool.Model.ClassModel;
 import com.example.pc.teachsomeafterschool.Model.Student;
+import com.example.pc.teachsomeafterschool.Student.MonthlyPaymentActivity;
+import com.example.pc.teachsomeafterschool.Student.MonthlyPaymentActivity_;
 import com.example.pc.teachsomeafterschool.Student.StudentInfoActivity;
 import com.example.pc.teachsomeafterschool.Student.StudentInfoActivity_;
 import com.example.pc.teachsomeafterschool.Student.StudentListAdapter;
@@ -54,8 +58,6 @@ public class ClassActivity extends AppCompatActivity
        /**/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class);
-
-        ////////////// Testing
         db = new DBHelper(getApplicationContext());
         init();
     }
@@ -66,8 +68,22 @@ public class ClassActivity extends AppCompatActivity
         if(drawer.getVisibility()==View.INVISIBLE){
             drawer.setVisibility(View.VISIBLE);
         }
+
         classList = db.getAllClasses();
-        classAdapter.notifyDataSetChanged();
+        classAdapter = new DrawerClassListAdapter(this, R.layout.drawer_class_list_item, classList);
+        lvclass.setAdapter(classAdapter);
+        if(classList.size()>0){
+            presentClass = classList.get(0);
+          //  lvclass.getChildAt(2).setBackgroundColor(Color.YELLOW);
+            Student test = new Student();
+            test = db.getStudent(1);
+            studentList = db.getStudents(presentClass.getId());
+
+            if(studentList.size()!=0) {
+                studentAdapter = new StudentListAdapter(this, R.layout.student_list_item, studentList, presentClass);
+                lvstudent.setAdapter(studentAdapter);
+            }
+        }
     }
 
     public void init() {
@@ -91,26 +107,8 @@ public class ClassActivity extends AppCompatActivity
 
 //Add class to class listview
         classList = new ArrayList<ClassModel>();
-        classList = db.getAllClasses();
-        classAdapter = new DrawerClassListAdapter(this, R.layout.drawer_class_list_item, classList);
-        lvclass.setAdapter(classAdapter);
-//        lvclass.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-//        lvclass.setSelection(0);
-        if(classList.size()>0){
-            presentClass = classList.get(0);
-        }
-
-//Add to student list
         studentList = new ArrayList<Student>();
-        Student firstStudent = new Student();
-        firstStudent.setFull_name("Tan Vinh Tam");
-        studentList.add(firstStudent);
-        Student secondStudent = new Student();
-        secondStudent.setFull_name("Tan Thi Oanh");
-        studentList.add(secondStudent);
 
-        studentAdapter = new StudentListAdapter(this, R.layout.student_list_item, studentList);
-        lvstudent.setAdapter(studentAdapter);
         animListener = new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -121,6 +119,10 @@ public class ClassActivity extends AppCompatActivity
             public void onAnimationEnd(Animation animation) {
                 drawer.setVisibility(View.INVISIBLE);
                 Intent intent = new Intent(ClassActivity.this, StudentInfoActivity_.class);
+//                intent.putExtra("classModel", (Parcelable) presentClass);
+                intent.putExtra("className",presentClass.getName());
+                intent.putExtra("classId",presentClass.getId());
+                intent.putExtra("startingTime",presentClass.getStartingTime());
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_left_enter, R.anim.no_anim);
             }
@@ -157,6 +159,15 @@ public class ClassActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+//            Toast.makeText(ClassActivity.this,"setting click",Toast.LENGTH_LONG).show();
+            if(presentClass!=null){
+                anim = AnimationUtils.loadAnimation(ClassActivity.this,R.anim.slide_down_leave);
+                anim.setAnimationListener(animListener);
+                drawer.startAnimation(anim);
+
+            }else{
+                Toast.makeText(ClassActivity.this,getApplicationContext().getResources().getString(R.string.error_no_class_existed),Toast.LENGTH_LONG).show();
+                            }
             return true;
         }
 
@@ -208,15 +219,25 @@ public class ClassActivity extends AppCompatActivity
 //            Student thirdStudent = new Student();
 //            thirdStudent.setFull_name("Nguyen Duc Hien");
             studentList.clear();
-//            studentList.add(thirdStudent);
-            studentList = db.getAllStudents(presentClass.getId());
-            studentAdapter = new StudentListAdapter(this, R.layout.student_list_item, studentList);
+            studentList = db.getStudents(presentClass.getId());
+//            studentAdapter.notifyDataSetChanged();
+            studentAdapter = new StudentListAdapter(this, R.layout.student_list_item, studentList, presentClass);
             lvstudent.setAdapter(studentAdapter);
         }
         if(parent.getId()==R.id.lvstudent_list){
-            anim = AnimationUtils.loadAnimation(ClassActivity.this,R.anim.slide_down_leave);
-            anim.setAnimationListener(animListener);
-            drawer.startAnimation(anim);
+//            anim = AnimationUtils.loadAnimation(ClassActivity.this,R.anim.slide_down_leave);
+//            anim.setAnimationListener(animListener);
+//            drawer.startAnimation(anim);
+            Intent intent = new Intent(ClassActivity.this, MonthlyPaymentActivity_.class);
+            intent.putExtra("studentFullName", studentList.get(position).getFullName());
+            intent.putExtra("studentPhone",studentList.get(position).getPhone());
+            intent.putExtra("studentAdd",studentList.get(position).getAdd());
+            intent.putExtra("studentImageUrl",studentList.get(position).getImageUrl());
+            intent.putExtra("studentMonthlyPayment",studentList.get(position).getMonthlyPayment());
+            intent.putExtra("classTuition",presentClass.getTuition());
+            intent.putExtra("startingTime",presentClass.getStartingTime());
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_left_enter, R.anim.no_anim);
         }
     }
 
@@ -227,6 +248,6 @@ public class ClassActivity extends AppCompatActivity
             isAddButtonClicked = true;
 
         }
-
     }
+
 }
