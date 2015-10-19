@@ -79,7 +79,7 @@
                     android:id="@+id/imgAvatar_tuition"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:foregroundGravity="top"
+                    android:layout_gravity="center"
                     android:src="@drawable/avatar"></ImageView>
             </LinearLayout>
         </LinearLayout>

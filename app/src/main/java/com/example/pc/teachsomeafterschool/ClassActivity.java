@@ -75,8 +75,8 @@ public class ClassActivity extends AppCompatActivity
         if(classList.size()>0){
             presentClass = classList.get(0);
           //  lvclass.getChildAt(2).setBackgroundColor(Color.YELLOW);
-            Student test = new Student();
-            test = db.getStudent(1);
+            //Student test = new Student();
+            //test = db.getStudent(1);
             studentList = db.getStudents(presentClass.getId());
 
             if(studentList.size()!=0) {

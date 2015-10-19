@@ -56,7 +56,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_ADDRESS = "address";
     private static final String KEY_SEX = "sex";
     private static final String KEY_AVATAR = "image_url";
-    private static final String KEY_MONTHLY_PAYMENT="monthly_payment";
+    private static final String KEY_MONTHLY_PAYMENT = "monthly_payment";
 
 
     // CLASS_STUDENTS table - column names
@@ -74,21 +74,21 @@ public class DBHelper extends SQLiteOpenHelper {
             + " TEXT,"
             + KEY_SCHOOL
             + " TEXT," + KEY_PHONE
-            +" TEXT,"
+            + " TEXT,"
             + KEY_ADDRESS
             + " TEXT,"
             + KEY_SEX
             + " INTEGER,"
             + KEY_AVATAR + " TEXT,"
             + KEY_STARTING_TIME + " TEXT,"
-            +  KEY_MONTHLY_PAYMENT + " TEXT" +
+            + KEY_MONTHLY_PAYMENT + " TEXT" +
 
             ")";
 
     // CLASS table create statement
     private static final String CREATE_TABLE_CLASS = "CREATE TABLE " + TABLE_CLASS
             + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-            + KEY_STARTING_TIME + " TEXT," + KEY_IS_FINISH + " INTEGER," + KEY_TUITION + " INTEGER," + KEY_WEEK_TIME + " TEXT"+")";
+            + KEY_STARTING_TIME + " TEXT," + KEY_IS_FINISH + " INTEGER," + KEY_TUITION + " INTEGER," + KEY_WEEK_TIME + " TEXT" + ")";
 
     // CLASS_STUDENT table create statement
     private static final String CREATE_TABLE_CLASS_STUDENT = "CREATE TABLE "
@@ -138,10 +138,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return todo_id;
     }
 
-/*get all classes*/
-    public ArrayList<ClassModel> getAllClasses(){
+    /*get all classes*/
+    public ArrayList<ClassModel> getAllClasses() {
         ArrayList<ClassModel> classes = new ArrayList<ClassModel>();
-        String selectQuery = "SELECT  * FROM " + TABLE_CLASS+" ORDER BY "+KEY_ID+" DESC";
+        String selectQuery = "SELECT  * FROM " + TABLE_CLASS + " ORDER BY " + KEY_ID + " DESC";
 
         Log.e(LOG, selectQuery);
 
@@ -161,13 +161,14 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return classes;
     }
-    public ArrayList<ClassModel> getClasses(String grade){
+
+    public ArrayList<ClassModel> getClasses(String grade) {
         ArrayList<ClassModel> classes = new ArrayList<ClassModel>();
-        String selectQuery = "SELECT  * FROM " + TABLE_CLASS+ " where " + KEY_NAME + " like ?"+" ORDER BY "+KEY_ID+" DESC";
+        String selectQuery = "SELECT  * FROM " + TABLE_CLASS + " where " + KEY_NAME + " like ?" + " ORDER BY " + KEY_ID + " DESC";
 
         Log.e(LOG, selectQuery);
         String[] para = new String[1];
-        para[0]= grade + "%";
+        para[0] = grade + "%";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, para);
         if (c.moveToFirst()) {
@@ -186,7 +187,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /*
-	 * get single class
+     * get single class
 	 */
     public ClassModel getClass(long class_id) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -230,20 +231,22 @@ public class DBHelper extends SQLiteOpenHelper {
         return student_id;
     }
 
-    public ArrayList<Student> getStudents(int classId){
+    public ArrayList<Student> getStudents(long classId) {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Student> result = new ArrayList<Student>();
         ArrayList<ClassStudent> classStudentList = new ArrayList<ClassStudent>();
         classStudentList = getClassStudentByClassId(classId);
-        for(ClassStudent clSt: classStudentList){
+        for (ClassStudent clSt : classStudentList) {
             result.add(getStudent(clSt.getStudentId()));
         }
         return result;
     }
-    public ArrayList<Student> getAllStudents(int classId){
+
+    public ArrayList<Student> getAllStudents(int classId) {
         ArrayList<Student> result = new ArrayList<Student>();
         return result;
     }
+
     public Student getStudent(int studentId) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -253,7 +256,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         if (c != null)
             c.moveToFirst();
-
+        int i = c.getCount();
         Student cl = new Student();
         cl.setId(c.getInt((c.getColumnIndex(KEY_ID))));
         cl.setFullNname((c.getString(c.getColumnIndex(KEY_FULL_NAME))));
@@ -265,7 +268,6 @@ public class DBHelper extends SQLiteOpenHelper {
         cl.setAdd(c.getString(c.getColumnIndex(KEY_ADDRESS)));
         cl.setSex(c.getInt(c.getColumnIndex(KEY_SEX)));
         cl.setMonthlyPayment(c.getString(c.getColumnIndex(KEY_MONTHLY_PAYMENT)));
-
         return cl;
     }
 
@@ -281,9 +283,9 @@ public class DBHelper extends SQLiteOpenHelper {
         return class_student_id;
     }
 
-    public ArrayList<ClassStudent> getClassStudentByClassId(int classId){
+    public ArrayList<ClassStudent> getClassStudentByClassId(long classId) {
         ArrayList<ClassStudent> result = new ArrayList<ClassStudent>();
-        String selectQuery = "SELECT  * FROM " + TABLE_CLASS_STUDENT+ " where " + KEY_CLASS_ID + " ="+classId+" ORDER BY "+KEY_ID+" DESC";
+        String selectQuery = "SELECT  * FROM " + TABLE_CLASS_STUDENT + " where " + KEY_CLASS_ID + " =" + classId + " ORDER BY " + KEY_ID + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);

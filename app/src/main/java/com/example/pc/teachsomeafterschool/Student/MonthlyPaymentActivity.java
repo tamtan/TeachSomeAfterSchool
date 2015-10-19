@@ -1,6 +1,8 @@
 package com.example.pc.teachsomeafterschool.Student;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,6 +12,12 @@ import com.example.pc.teachsomeafterschool.Infra.Const;
 import com.example.pc.teachsomeafterschool.Infra.Util;
 import com.example.pc.teachsomeafterschool.Model.Tuition;
 import com.example.pc.teachsomeafterschool.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -30,7 +38,8 @@ public class MonthlyPaymentActivity extends Activity {
     String studentMonthlyPayment, startingMonth, currentMonth;
     int classTuition;
     ArrayList<Tuition> tuis;
-
+    private com.nostra13.universalimageloader.core.ImageLoader imageLoader;
+    DisplayImageOptions options;
     @Click({R.id.imgBack, R.id.imgOk})
     public void onClick(View v) {
         switch (v.getId()) {
@@ -49,10 +58,52 @@ public class MonthlyPaymentActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        imageLoader = ImageLoader.getInstance();
+
+        imageLoader.init(ImageLoaderConfiguration
+                .createDefault(MonthlyPaymentActivity.this));
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.avatar) // resource or drawable
+                .showImageForEmptyUri(R.drawable.avatar) // resource or drawable
+                .showImageOnFail(R.drawable.avatar)
+                .bitmapConfig(Bitmap.Config.ARGB_8888).cacheInMemory(false)
+                .considerExifParams(true).build();
     }
 
     @AfterViews
     public void init() {
+        ImageSize targetSize = new ImageSize(100, 100);
+        imageLoader.loadImage("file://" +getIntent().getExtras().getString("studentImageUrl") , targetSize, options,
+                new SimpleImageLoadingListener() {
+                    ProgressDialog dialog = new ProgressDialog(MonthlyPaymentActivity.this);
+
+                    @Override
+                    public void onLoadingStarted(String imageUri,
+                                                 View view) {
+
+                        dialog.show();
+
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri,
+                                                View view, FailReason failReason) {
+//                             TODO Auto-generated method stub
+                        super.onLoadingFailed(imageUri, view,
+                                failReason);
+                        dialog.dismiss();
+
+
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri,
+                                                  View view1, Bitmap loadedImage) {
+                        dialog.dismiss();
+                        imgAvatar_tuition.setImageBitmap(loadedImage);
+
+                    }
+                });
         tvTitle.setText(getApplicationContext().getResources().getString(R.string.tuition_detail));
         tvFull_name.setText(getIntent().getExtras().getString("studentFullName"));
         tvPhone.setText(getIntent().getExtras().getString("studentPhone"));
