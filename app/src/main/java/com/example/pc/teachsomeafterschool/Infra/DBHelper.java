@@ -303,4 +303,27 @@ public class DBHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    public void deleteClass(int classId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<ClassStudent> students = getClassStudentByClassId(classId);
+        for (ClassStudent student : students) {
+            deleteStudent(student.getId());
+        }
+        db.delete(TABLE_CLASS, KEY_ID + " = ?",
+                new String[]{String.valueOf(classId)});
+    }
+
+
+    public void deleteStudent(int studentId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_STUDENT, KEY_ID + " = ?",
+                new String[]{String.valueOf(studentId)});
+        deleteClass_Student(studentId);
+    }
+
+    public void deleteClass_Student(int studentId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_CLASS_STUDENT, KEY_STUDENT_ID + " = ?",
+                new String[]{String.valueOf(studentId)});
+    }
 }

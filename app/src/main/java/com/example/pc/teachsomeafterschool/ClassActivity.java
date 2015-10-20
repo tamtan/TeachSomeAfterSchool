@@ -20,20 +20,23 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pc.teachsomeafterschool.Class.ClassInfoActivity;
 import com.example.pc.teachsomeafterschool.Class.ClassInfoActivity_;
 import com.example.pc.teachsomeafterschool.Class.DrawerClassListAdapter;
 import com.example.pc.teachsomeafterschool.Infra.DBHelper;
 import com.example.pc.teachsomeafterschool.Model.ClassModel;
 import com.example.pc.teachsomeafterschool.Model.Student;
+import com.example.pc.teachsomeafterschool.Student.MonthlyPaymentActivity_;
 import com.example.pc.teachsomeafterschool.Student.StudentInfoActivity_;
 import com.example.pc.teachsomeafterschool.Student.StudentListAdapter;
 
 import java.util.ArrayList;
 
 public class ClassActivity extends AppCompatActivity
-        implements DrawerLayout.DrawerListener, AdapterView.OnItemClickListener, View.OnClickListener{
+        implements DrawerLayout.DrawerListener, AdapterView.OnItemClickListener, View.OnClickListener {
     ImageView imgAdd;
     DBHelper db;
     LinearLayout content_fragment, nav_view;
@@ -72,9 +75,6 @@ public class ClassActivity extends AppCompatActivity
         lvclass.setAdapter(classAdapter);
         if (classList.size() > 0) {
             presentClass = classList.get(0);
-            //  lvclass.getChildAt(2).setBackgroundColor(Color.YELLOW);
-            //Student test = new Student();
-            //test = db.getStudent(1);
             studentList = db.getStudents(presentClass.getId());
 
             if (studentList.size() != 0) {
@@ -206,20 +206,10 @@ public class ClassActivity extends AppCompatActivity
             lvstudent.setAdapter(studentAdapter);
         }
         if (parent.getId() == R.id.lvstudent_list) {
-            MenuDialog dialog = new MenuDialog(ClassActivity.this);
+            MenuDialog dialog = new MenuDialog(ClassActivity.this, studentList.get(position), presentClass);
             dialog.getWindow().setBackgroundDrawable(
                     new ColorDrawable(android.graphics.Color.TRANSPARENT));
             dialog.show();
-//            Intent intent = new Intent(ClassActivity.this, MonthlyPaymentActivity_.class);
-//            intent.putExtra("studentFullName", studentList.get(position).getFullName());
-//            intent.putExtra("studentPhone", studentList.get(position).getPhone());
-//            intent.putExtra("studentAdd", studentList.get(position).getAdd());
-//            intent.putExtra("studentImageUrl", studentList.get(position).getImageUrl());
-//            intent.putExtra("studentMonthlyPayment", studentList.get(position).getMonthlyPayment());
-//            intent.putExtra("classTuition", presentClass.getTuition());
-//            intent.putExtra("startingTime", presentClass.getStartingTime());
-//            startActivity(intent);
-//            overridePendingTransition(R.anim.slide_left_enter, R.anim.no_anim);
         }
     }
 
@@ -232,25 +222,81 @@ public class ClassActivity extends AppCompatActivity
     }
 
     protected class MenuDialog extends Dialog {
+        ClassModel presentClass;
+        Student student;
         Context context;
+        TextView tvStudentDetail, tvDelete, tvCancel, tvMove, tvTuition;
 
         public MenuDialog(Context context) {
             super(context);
             this.context = context;
         }
 
+        public MenuDialog(Context context, Student student, ClassModel presentClass) {
+            super(context);
+            this.context = context;
+            this.student = student;
+            this.presentClass = presentClass;
+
+        }
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//            WindowManager.LayoutParams params = getWindow().getAttributes();
-//            params.height = LinearLayout.LayoutParams.WRAP_CONTENT;
-//            getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
-//            Window window = this.getWindow();
-//            window.setLayout(60, 60);//
-
-
             setContentView(R.layout.menu_dialog);
+            tvTuition = (TextView) findViewById(R.id.tv_tuition_status);
+            tvTuition.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ClassActivity.this, MonthlyPaymentActivity_.class);
+                    intent.putExtra("studentFullName", student.getFullName());
+                    intent.putExtra("studentPhone", student.getPhone());
+                    intent.putExtra("studentAdd", student.getAdd());
+                    intent.putExtra("studentImageUrl", student.getImageUrl());
+                    intent.putExtra("studentMonthlyPayment", student.getMonthlyPayment());
+                    intent.putExtra("classTuition", presentClass.getTuition());
+                    intent.putExtra("startingTime", presentClass.getStartingTime());
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_left_enter, R.anim.no_anim);
+                }
+            });
+            tvStudentDetail = (TextView) findViewById(R.id.tv_student_detail);
+            tvCancel = (TextView) findViewById(R.id.tv_cancel);
+            tvCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
+            tvDelete = (TextView) findViewById(R.id.tv_delete);
+            tvDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    db.deleteStudent(student.getId());
+                    dismiss();
+                    studentList = db.getStudents(presentClass.getId());
+
+                    if (studentList.size() != 0) {
+                        studentAdapter = new StudentListAdapter(ClassActivity.this, R.layout.student_list_item, studentList, presentClass);
+                        lvstudent.setAdapter(studentAdapter);
+                    }
+
+                }
+            });
+            tvMove = (TextView) findViewById(R.id.tv_move);
+            tvMove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            tvStudentDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
 
         }
     }
