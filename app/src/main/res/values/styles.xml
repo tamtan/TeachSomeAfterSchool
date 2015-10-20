@@ -60,5 +60,9 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="dialog_menu_item">
+        <item name="android:layout_height">30dp</item>
+    </style>
+
     <!--student activity-->
 </resources>

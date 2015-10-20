@@ -77,13 +77,13 @@ public class StudentListAdapter extends ArrayAdapter<Student> {
         ImageSize targetSize = new ImageSize(70, 70);
         imageLoader.loadImage("file://" + objects.get(position).getImageUrl(), targetSize, options,
                 new SimpleImageLoadingListener() {
-                    ProgressDialog dialog = new ProgressDialog(context);
+//                    ProgressDialog dialog = new ProgressDialog(context);
 
                     @Override
                     public void onLoadingStarted(String imageUri,
                                                  View view) {
 
-                        dialog.show();
+//                        dialog.show();
 
                     }
 
@@ -93,7 +93,7 @@ public class StudentListAdapter extends ArrayAdapter<Student> {
 //                             TODO Auto-generated method stub
                         super.onLoadingFailed(imageUri, view,
                                 failReason);
-                        dialog.dismiss();
+//                        dialog.dismiss();
 
 
                     }
@@ -101,14 +101,11 @@ public class StudentListAdapter extends ArrayAdapter<Student> {
                     @Override
                     public void onLoadingComplete(String imageUri,
                                                   View view1, Bitmap loadedImage) {
-                        dialog.dismiss();
+//                        dialog.dismiss();
                         holder.imgavatar.setImageBitmap(loadedImage);
 
                     }
                 });
-//        holder.imgavatar.setImageBitmap(Util.getBitmapFromGallery(this.context, objects.get(position).getImageUrl()));
-//        tuis= calculateMonthlyPaymentToTuitionArray(Integer.toString(classModel.getTuition()));
-//        holder.tvmonth_in_debt.setText(Integer.toString(Util.calculateTotalDebt(tuis, classModel.getStartingTime(), Util.getCurrentMonth())));
         return convertView;
     }
     public ArrayList<Tuition> calculateMonthlyPaymentToTuitionArray(String monthlyPayment, String startingMonth, String currentMonth) {
@@ -138,42 +135,5 @@ public class StudentListAdapter extends ArrayAdapter<Student> {
         TextView tvstudent_name, tvreal_class_name, tvmonth_in_debt, tvphone;
     }
 
-    public Bitmap getBitmapFromGallery(final Context context, String imageUrl) {
-
-        ImageSize targetSize = new ImageSize(200, 200);
-        final Bitmap[] result = {null};
-        imageLoader.loadImage("file://"+imageUrl, targetSize, options,
-                new SimpleImageLoadingListener() {
-                    ProgressDialog dialog = new ProgressDialog(context);
-                    @Override
-                    public void onLoadingStarted(String imageUri,
-                                                 View view) {
-
-                        dialog.show();
-
-                    }
-
-                    @Override
-                    public void onLoadingFailed(String imageUri,
-                                                View view, FailReason failReason) {
-//                             TODO Auto-generated method stub
-                        super.onLoadingFailed(imageUri, view,
-                                failReason);
-                        dialog.dismiss();
-
-
-                    }
-
-                    @Override
-                    public void onLoadingComplete(String imageUri,
-                                                  View view1, Bitmap loadedImage) {
-                        dialog.dismiss();
-                        result[0] = loadedImage;
-//                        image.setImageBitmap(loadedImage);
-
-                    }
-                });
-        return result[0];
-    }
 
 }

@@ -476,8 +476,6 @@ public class StudentInfoActivity extends Activity {
             Bitmap bitmap = null;
             Bitmap newBitmap = null;
             Uri uri = null;
-
-
             try {
 
                 /**  Uri.withAppendedPath Method Description

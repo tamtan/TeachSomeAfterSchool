@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/weekly_rounded_button_scheduled"
+    android:layout_margin="@dimen/dialog_magin"
+
+    >
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:textSize="10pt"
+    android:text="@string/student_detail"
+    android:gravity="center"/>
+    <TextView
+        android:textSize="10pt"
+        style="@style/dialog_menu_item"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="@string/delete"
+        android:gravity="center"/>
+    <TextView
+        android:textSize="10pt"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="@string/move"
+        android:gravity="center"/>
+    <TextView
+        android:textSize="10pt"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="@string/cancel"
+        android:gravity="center"/>
+</LinearLayout>

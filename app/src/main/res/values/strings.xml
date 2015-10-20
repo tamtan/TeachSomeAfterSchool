@@ -73,4 +73,7 @@
     <string name="error_no_class_existed">Bạn chưa tạo lớp</string>
     <string name="notification_success_creating_class">Bạn đã tạo lớp thành công</string>
     <string name="tuition_detail">Thông tin học phí</string>
+    <string name="student_detail">Thông tin chi tiết</string>
+    <string name="delete">Xóa</string>
+    <string name="move">Chuyển lớp</string>
 </resources>
